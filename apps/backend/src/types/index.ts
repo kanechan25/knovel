@@ -1,39 +1,37 @@
 import type { UserRole, TaskStatus } from '../../generated/prisma';
 
+// Auth types
 export interface AuthUser {
   id: string;
   username: string;
   role: UserRole;
 }
 
-export interface SignupRequest {
+export interface AuthResponse {
+  token: string;
+  user: AuthUser;
+}
+
+export interface SignupData {
   username: string;
   password: string;
   role: UserRole;
 }
 
-export interface SigninRequest {
+export interface SigninData {
   username: string;
   password: string;
 }
 
-export interface AuthResponse {
-  token: string;
-  user: {
-    id: string;
-    username: string;
-    role: UserRole;
-  };
-}
-
-export interface CreateTaskRequest {
+// Task types
+export interface CreateTaskData {
   title: string;
   description?: string;
   assignedToId?: string;
   dueDate?: string;
 }
 
-export interface UpdateTaskRequest {
+export interface UpdateTaskData {
   title?: string;
   description?: string;
   status?: TaskStatus;
@@ -46,6 +44,14 @@ export interface TaskFilters {
   status?: TaskStatus;
   sortBy?: 'createdAt' | 'dueDate' | 'status';
   sortOrder?: 'asc' | 'desc';
+}
+
+export interface EmployeeSummary {
+  id: string;
+  username: string;
+  totalTasks: number;
+  completedTasks: number;
+  completionRate: number;
 }
 
 export interface TaskResponse {
@@ -64,12 +70,4 @@ export interface TaskResponse {
     id: string;
     username: string;
   };
-}
-
-export interface EmployeeSummary {
-  id: string;
-  username: string;
-  totalTasks: number;
-  completedTasks: number;
-  completionRate: number;
 }

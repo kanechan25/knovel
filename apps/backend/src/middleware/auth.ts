@@ -1,53 +1,52 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import authService from '../services/auth.service';
+import { AuthUser } from '../types';
+import { AppError } from './errorHandler';
+import logger from '../config/logger';
 import type { UserRole } from '../../generated/prisma';
-import type { AuthUser } from '../types';
 
 export interface AuthRequest extends Request {
   user?: AuthUser;
 }
 
-export const authenticateToken = (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): void => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) {
-    res.status(401).json({ error: 'Access token required' });
-    return;
-  }
-
+export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as AuthUser;
-    req.user = decoded;
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      throw new AppError('Access token required', 401);
+    }
+
+    const user = authService.verifyToken(token);
+    req.user = user;
+
+    logger.debug(`User authenticated: ${user.username} (${user.role})`);
     next();
-  } catch {
-    res.status(403).json({ error: 'Invalid or expired token' });
+  } catch (error) {
+    next(error);
   }
 };
 
 export const requireRole = (roles: UserRole[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
-    if (!req.user) {
-      res.status(401).json({ error: 'Authentication required' });
-      return;
-    }
+    try {
+      if (!req.user) {
+        throw new AppError('Authentication required', 401);
+      }
 
-    if (!roles.includes(req.user.role)) {
-      res.status(403).json({ error: 'Insufficient permissions' });
-      return;
-    }
+      if (!roles.includes(req.user.role)) {
+        logger.warn(`Access denied: ${req.user.username} tried to access ${req.path}`);
+        throw new AppError('Insufficient permissions', 403);
+      }
 
-    next();
+      next();
+    } catch (error) {
+      next(error);
+    }
   };
 };
 
 export const requireEmployer = requireRole(['EMPLOYER' as UserRole]);
 export const requireEmployee = requireRole(['EMPLOYEE' as UserRole]);
-export const requireAnyRole = requireRole([
-  'EMPLOYER' as UserRole,
-  'EMPLOYEE' as UserRole,
-]);
+export const requireAnyRole = requireRole(['EMPLOYER' as UserRole, 'EMPLOYEE' as UserRole]);

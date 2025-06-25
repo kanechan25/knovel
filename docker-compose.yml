@@ -1,0 +1,69 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: task-manager-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: task_management
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - task-manager-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d task_management"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend API
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    container_name: task-manager-backend
+    environment:
+      PORT: 5000
+      NODE_ENV: production
+      JWT_SECRET: your_super_secret_jwt_key_here_please_change_in_production
+      JWT_EXPIRES_IN: 24h
+      DATABASE_URL: postgresql://user:password@postgres:5432/task_management?schema=public
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - task-manager-network
+    volumes:
+      - ./apps/backend:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  # Frontend React App
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+    container_name: task-manager-frontend
+    environment:
+      VITE_API_URL: http://localhost:5000
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - task-manager-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  task-manager-network:
+    driver: bridge

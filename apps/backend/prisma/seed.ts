@@ -4,14 +4,12 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Starting database seeding...');
-
   // Clear existing data
   await prisma.task.deleteMany();
   await prisma.user.deleteMany();
 
   // Create sample users
-  const hashedPassword = await bcrypt.hash('password123', 12);
+  const hashedPassword = await bcrypt.hash('knovel123@', 12);
 
   // Create employers
   const employer1 = await prisma.user.create({
@@ -59,8 +57,7 @@ async function main() {
   const tasks = [
     {
       title: 'Implement user authentication',
-      description:
-        'Set up JWT-based authentication system with role-based access control',
+      description: 'Set up JWT-based authentication system with role-based access control',
       status: TaskStatus.COMPLETED,
       createdById: employer1.id,
       assignedToId: employee1.id,
@@ -68,8 +65,7 @@ async function main() {
     },
     {
       title: 'Design database schema',
-      description:
-        'Create comprehensive database schema for the task management system',
+      description: 'Create comprehensive database schema for the task management system',
       status: TaskStatus.IN_PROGRESS,
       createdById: employer1.id,
       assignedToId: employee1.id,
@@ -77,8 +73,7 @@ async function main() {
     },
     {
       title: 'Create React components',
-      description:
-        'Build reusable React components for the frontend application',
+      description: 'Build reusable React components for the frontend application',
       status: TaskStatus.PENDING,
       createdById: employer1.id,
       assignedToId: employee2.id,
@@ -86,8 +81,7 @@ async function main() {
     },
     {
       title: 'Write API documentation',
-      description:
-        'Document all API endpoints with examples and response formats',
+      description: 'Document all API endpoints with examples and response formats',
       status: TaskStatus.PENDING,
       createdById: employer1.id,
       assignedToId: employee3.id,
@@ -122,16 +116,6 @@ async function main() {
   await prisma.task.createMany({
     data: tasks,
   });
-
-  console.log('✅ Database seeding completed successfully!');
-  console.log(`👥 Created ${await prisma.user.count()} users`);
-  console.log(`📋 Created ${await prisma.task.count()} tasks`);
-  console.log('');
-  console.log('Sample credentials:');
-  console.log('Employers: employer1, employer2 (password: password123)');
-  console.log(
-    'Employees: employee1, employee2, employee3 (password: password123)'
-  );
 }
 
 main()

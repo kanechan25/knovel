@@ -7,12 +7,11 @@ class TaskService {
   async createTask(data: CreateTaskData, createdBy: AuthUser) {
     logger.info(`Creating task: ${data.title} by ${createdBy.username}`);
 
-    // Validate assignedTo user exists and is an employee
+    // Check user exists + is an employee
     if (data.assignedToId) {
       const assignedUser = await prisma.user.findUnique({
         where: { id: data.assignedToId },
       });
-
       if (!assignedUser || assignedUser.role !== 'EMPLOYEE') {
         logger.warn(`Invalid employee assignment: ${data.assignedToId}`);
         throw new AppError('Invalid employee assignment', 400);
@@ -36,7 +35,6 @@ class TaskService {
         },
       },
     });
-
     logger.info(`Task created successfully: ${task.id}`);
     return task;
   }
@@ -46,24 +44,18 @@ class TaskService {
 
     const whereClause: Record<string, unknown> = {};
 
-    // Role-based filtering
+    // filter by role
     if (user.role === 'EMPLOYEE') {
-      // Employees can only see their assigned tasks
       whereClause.assignedToId = user.id;
     } else {
-      // Employers can see all tasks they created
       whereClause.createdById = user.id;
-
-      // Apply filters for employers
       if (filters.assignedToId) {
         whereClause.assignedToId = filters.assignedToId;
       }
     }
-
     if (filters.status) {
       whereClause.status = filters.status;
     }
-
     const tasks = await prisma.task.findMany({
       where: whereClause,
       include: {
@@ -78,14 +70,12 @@ class TaskService {
         [filters.sortBy || 'createdAt']: filters.sortOrder || 'desc',
       },
     });
-
     logger.debug(`Found ${tasks.length} tasks for ${user.username}`);
     return tasks;
   }
 
   async getTaskById(id: string, user: AuthUser) {
     logger.debug(`Getting task ${id} for ${user.username}`);
-
     const task = await prisma.task.findUnique({
       where: { id },
       include: {
@@ -97,12 +87,9 @@ class TaskService {
         },
       },
     });
-
     if (!task) {
       throw new AppError('Task not found', 404);
     }
-
-    // Check permissions
     if (user.role === 'EMPLOYEE') {
       if (task.assignedToId !== user.id) {
         logger.warn(`Access denied: Employee ${user.id} accessing task ${id}`);
@@ -114,7 +101,6 @@ class TaskService {
         throw new AppError('Access denied', 403);
       }
     }
-
     return task;
   }
 
@@ -129,13 +115,11 @@ class TaskService {
       throw new AppError('Task not found', 404);
     }
 
-    // Check permissions
+    // Check role permissions
     if (user.role === 'EMPLOYEE') {
-      // Employees can only update status of their assigned tasks
       if (task.assignedToId !== user.id) {
         throw new AppError('Access denied', 403);
       }
-      // Employees can only update status
       if (data.title || data.description || data.assignedToId || data.dueDate) {
         throw new AppError('Employees can only update task status', 403);
       }
@@ -145,7 +129,6 @@ class TaskService {
       }
     }
 
-    // Validate assignedTo user if provided
     if (data.assignedToId) {
       const assignedUser = await prisma.user.findUnique({
         where: { id: data.assignedToId },
@@ -155,7 +138,6 @@ class TaskService {
         throw new AppError('Invalid employee assignment', 400);
       }
     }
-
     const updateData: Record<string, unknown> = {};
     if (data.title !== undefined) updateData.title = data.title;
     if (data.description !== undefined) updateData.description = data.description;
@@ -164,7 +146,6 @@ class TaskService {
     if (data.dueDate !== undefined) {
       updateData.dueDate = data.dueDate ? new Date(data.dueDate) : null;
     }
-
     const updatedTask = await prisma.task.update({
       where: { id },
       data: updateData,
@@ -177,37 +158,31 @@ class TaskService {
         },
       },
     });
-
     logger.info(`Task ${id} updated successfully`);
     return updatedTask;
   }
 
   async deleteTask(id: string, user: AuthUser) {
     logger.info(`Deleting task ${id} by ${user.username}`);
-
     const task = await prisma.task.findUnique({
       where: { id },
     });
-
     if (!task) {
       throw new AppError('Task not found', 404);
     }
 
-    // Only employers who created the task can delete it
+    // check delete permission
     if (user.role !== 'EMPLOYER' || task.createdById !== user.id) {
       throw new AppError('Access denied', 403);
     }
-
     await prisma.task.delete({
       where: { id },
     });
-
     logger.info(`Task ${id} deleted successfully`);
   }
 
   async getEmployeeSummary(employerId: string): Promise<EmployeeSummary[]> {
     logger.info(`Getting employee summary for employer ${employerId}`);
-
     const employees = await prisma.user.findMany({
       where: { role: 'EMPLOYEE' },
       select: {
@@ -215,7 +190,7 @@ class TaskService {
         username: true,
         assignedTasks: {
           where: {
-            createdById: employerId, // Only tasks created by this employer
+            createdById: employerId, // filter by created by
           },
           select: {
             status: true,
@@ -228,23 +203,20 @@ class TaskService {
       const totalTasks = employee.assignedTasks.length;
       const completedTasks = employee.assignedTasks.filter((task) => task.status === 'COMPLETED').length;
       const completionRate = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-
       return {
         id: employee.id,
         username: employee.username,
         totalTasks,
         completedTasks,
-        completionRate: Math.round(completionRate * 100) / 100, // Round to 2 decimal places
+        completionRate: Math.round(completionRate * 100) / 100, // Round 2 decimal
       };
     });
-
     logger.debug(`Employee summary generated for ${employees.length} employees`);
     return summary;
   }
 
   async getEmployees() {
     logger.debug('Getting all employees');
-
     const employees = await prisma.user.findMany({
       where: { role: 'EMPLOYEE' },
       select: {
@@ -253,7 +225,6 @@ class TaskService {
         createdAt: true,
       },
     });
-
     return employees;
   }
 }

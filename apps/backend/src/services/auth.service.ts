@@ -8,27 +8,22 @@ import type { AuthUser, AuthResponse, SignupData, SigninData } from '../types';
 
 class AuthService {
   private createToken(payload: AuthUser): string {
-    return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '24h' });
+    return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '48h' });
   }
 
   async signup(data: SignupData): Promise<AuthResponse> {
-    logger.info(`Signup attempt for username: ${data.username}`);
-
-    // Check if user already exists
+    // case 1: if user already existed
     const existingUser = await prisma.user.findUnique({
       where: { username: data.username },
     });
-
     if (existingUser) {
       logger.warn(`Signup failed: Username ${data.username} already exists`);
       throw new AppError('Username already exists', 409);
     }
 
-    // Hash password
+    // Case2: create new user
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(data.password, saltRounds);
-
-    // Create user
     const user = await prisma.user.create({
       data: {
         username: data.username,
@@ -38,16 +33,13 @@ class AuthService {
     });
 
     logger.info(`User created successfully: ${user.username} (${user.role})`);
-
-    // Generate JWT token
+    // Generate JWT
     const authUser: AuthUser = {
       id: user.id,
       username: user.username,
       role: user.role,
     };
-
     const token = this.createToken(authUser);
-
     return {
       token,
       user: authUser,
@@ -61,7 +53,6 @@ class AuthService {
     const user = await prisma.user.findUnique({
       where: { username: data.username },
     });
-
     if (!user) {
       logger.warn(`Signin failed: User ${data.username} not found`);
       throw new AppError('Invalid credentials', 401);
@@ -76,15 +67,13 @@ class AuthService {
 
     logger.info(`User signed in successfully: ${user.username}`);
 
-    // Generate JWT token
+    // Generate JWT
     const authUser: AuthUser = {
       id: user.id,
       username: user.username,
       role: user.role,
     };
-
     const token = this.createToken(authUser);
-
     return {
       token,
       user: authUser,

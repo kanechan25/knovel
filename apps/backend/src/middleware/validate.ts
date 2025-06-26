@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { AnyZodObject, ZodError } from 'zod';
 
-export const validateSchema = (schema: AnyZodObject) => {
+export const validate = (schema: AnyZodObject) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse({
@@ -16,7 +16,6 @@ export const validateSchema = (schema: AnyZodObject) => {
           field: err.path.join('.'),
           message: err.message,
         }));
-
         res.status(400).json({
           error: 'Validation failed',
           details: errors,

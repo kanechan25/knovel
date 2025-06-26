@@ -36,20 +36,18 @@ export const globalErrorHandler = (err: Error, req: Request, res: Response, _nex
     userAgent: req.get('User-Agent'),
   });
 
-  // Handle different types of errors
+  //  different errors
   if (err instanceof ZodError) {
     const errors = err.errors.map((error) => ({
       field: error.path.join('.'),
       message: error.message,
     }));
-
     res.status(400).json({
       error: 'Validation failed',
       details: errors,
     });
     return;
   }
-
   if (err instanceof AppError) {
     res.status(err.statusCode).json({
       error: err.message,
@@ -81,7 +79,6 @@ export const globalErrorHandler = (err: Error, req: Request, res: Response, _nex
     });
     return;
   }
-
   if (err.name === 'TokenExpiredError') {
     res.status(401).json({
       error: 'Token expired',
@@ -89,10 +86,9 @@ export const globalErrorHandler = (err: Error, req: Request, res: Response, _nex
     return;
   }
 
-  // Default error
+  // Default
   const statusCode = (err as any).statusCode || 500;
   const message = env.NODE_ENV === 'production' ? 'Internal server error' : err.message;
-
   res.status(statusCode).json({
     error: message,
   });
@@ -104,7 +100,6 @@ export const notFoundHandler = (req: Request, res: Response): void => {
     path: req.path,
     ip: req.ip,
   });
-
   res.status(404).json({
     error: 'Route not found',
   });

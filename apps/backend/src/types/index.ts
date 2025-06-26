@@ -1,17 +1,13 @@
 import type { UserRole, TaskStatus } from '../../generated/prisma';
-
-// Auth types
 export interface AuthUser {
   id: string;
   username: string;
   role: UserRole;
 }
-
 export interface AuthResponse {
   token: string;
   user: AuthUser;
 }
-
 export interface SignupData {
   username: string;
   password: string;
@@ -23,7 +19,6 @@ export interface SigninData {
   password: string;
 }
 
-// Task types
 export interface CreateTaskData {
   title: string;
   description?: string;

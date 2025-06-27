@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import { env } from './config/env';
 import logger, { morganStream } from './config/logger';
 import { setupRoutes } from './routes';
+import { mkdirSync } from 'fs';
 
 const app = express();
 app.use(helmet());
@@ -25,8 +26,6 @@ if (env.NODE_ENV !== 'production') {
 // all routes and handlers
 setupRoutes(app);
 
-// logs directory if it doesn't exist
-import { mkdirSync } from 'fs';
 try {
   mkdirSync('logs', { recursive: true });
 } catch (error: any) {
@@ -35,9 +34,9 @@ try {
 }
 
 app.listen(env.PORT, () => {
-  logger.info(`🚀 Server running on port ${env.PORT}`);
+  logger.info(`Server running on port ${env.PORT}`);
   logger.info(`Check health API: http://localhost:${env.PORT}/health`);
-  logger.info(`🌍 Environment: ${env.NODE_ENV}`);
+  logger.info(`Environment: ${env.NODE_ENV}`);
 });
 
 export default app;

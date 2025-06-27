@@ -19,11 +19,11 @@ export const setupRoutes = (app: Express): void => {
     message: 'Too many authentication attempts, please try again later.',
   });
 
-  // Health check endpoint
+  // health check endpoint
   app.get('/health', (req, res) => {
     logger.info('Health check requested');
     res.status(200).json({
-      status: 'OK',
+      status: 'Health check OK',
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
       environment: env.NODE_ENV,

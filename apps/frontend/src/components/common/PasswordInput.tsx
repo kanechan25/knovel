@@ -1,18 +1,6 @@
 import React, { useState } from 'react';
 import EyeIcon from '../../assets/icons/EyeIcon';
-
-interface PasswordInputProps {
-  id: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  required?: boolean;
-  minLength?: number;
-  className?: string;
-  label?: string;
-}
+import type { PasswordInputProps } from '../../types';
 
 const PasswordInput: React.FC<PasswordInputProps> = ({
   id,

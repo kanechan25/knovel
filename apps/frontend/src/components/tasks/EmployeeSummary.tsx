@@ -1,8 +1,15 @@
 import React from 'react';
 import { useTaskStore } from '../../stores/taskStore';
+import { useSummary } from '../../hooks/useSummary';
+import {
+  getCompletionRateBackground,
+  getCompletionRateColor,
+  getProgressRateBackground,
+} from '../../utils/getColors';
 
 const EmployeeSummary: React.FC = () => {
-  const { employeeSummary, loading } = useTaskStore();
+  const { loading } = useTaskStore();
+  const { employeeSummary, taskStats, totalEmployees } = useSummary();
 
   if (loading) {
     return (
@@ -21,26 +28,53 @@ const EmployeeSummary: React.FC = () => {
     );
   }
 
-  const getCompletionRateColor = (rate: number) => {
-    if (rate >= 80) return 'text-green-600';
-    if (rate >= 60) return 'text-blue-600';
-    if (rate >= 40) return 'text-yellow-600';
-    return 'text-red-600';
-  };
-
-  const getCompletionRateBackground = (rate: number) => {
-    if (rate >= 80) return 'bg-green-100';
-    if (rate >= 60) return 'bg-blue-100';
-    if (rate >= 40) return 'bg-yellow-100';
-    return 'bg-red-100';
-  };
-
   return (
     <div className='space-y-4'>
       <div className='text-sm text-secondary-600 mb-4'>
         Task completion statistics for all employees
       </div>
-
+      {/* Summary */}
+      <div className='mt-6 p-4 bg-secondary-50 rounded-lg'>
+        <h5 className='font-medium text-secondary-900 mb-3'>Team Overview</h5>
+        <div className='grid grid-cols-2 md:grid-cols-3 gap-4 text-sm'>
+          <div className='text-center'>
+            <div className='font-semibold text-lg text-secondary-900'>
+              {totalEmployees}
+            </div>
+            <div className='text-secondary-500'>Total Employees</div>
+          </div>
+          <div className='text-center'>
+            <div className='font-semibold text-lg text-blue-600'>
+              {taskStats.total}
+            </div>
+            <div className='text-secondary-500'>Total Tasks Assigned</div>
+          </div>
+          <div className='text-center'>
+            <div className='font-semibold text-lg text-primary-600'>
+              {taskStats.completionRate}%
+            </div>
+            <div className='text-secondary-500'>Avg. Completion</div>
+          </div>
+          <div className='text-center'>
+            <div className='font-semibold text-lg text-green-600'>
+              {taskStats.completed}
+            </div>
+            <div className='text-secondary-500'>Total Completed Tasks</div>
+          </div>
+          <div className='text-center'>
+            <div className='font-semibold text-lg text-blue-600'>
+              {taskStats.inProgress}
+            </div>
+            <div className='text-secondary-500'>Total In Progress Tasks</div>
+          </div>
+          <div className='text-center'>
+            <div className='font-semibold text-lg text-yellow-600'>
+              {taskStats.pending}
+            </div>
+            <div className='text-secondary-500'>Total Pending Tasks</div>
+          </div>
+        </div>
+      </div>
       {employeeSummary.map((employee) => (
         <div
           key={employee.id}
@@ -85,68 +119,16 @@ const EmployeeSummary: React.FC = () => {
               <div className='text-secondary-500'>Remaining</div>
             </div>
           </div>
-
-          {/* Progress Bar */}
           <div className='mt-3'>
             <div className='w-full bg-secondary-200 rounded-full h-2'>
               <div
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  employee.completionRate >= 80
-                    ? 'bg-green-500'
-                    : employee.completionRate >= 60
-                      ? 'bg-blue-500'
-                      : employee.completionRate >= 40
-                        ? 'bg-yellow-500'
-                        : 'bg-red-500'
-                }`}
+                className={`h-2 rounded-full transition-all duration-300 ${getProgressRateBackground(employee.completionRate)}`}
                 style={{ width: `${Math.min(employee.completionRate, 100)}%` }}
               ></div>
             </div>
           </div>
         </div>
       ))}
-
-      {/* Summary Statistics */}
-      <div className='mt-6 p-4 bg-secondary-50 rounded-lg'>
-        <h5 className='font-medium text-secondary-900 mb-3'>Team Overview</h5>
-        <div className='grid grid-cols-2 md:grid-cols-4 gap-4 text-sm'>
-          <div className='text-center'>
-            <div className='font-semibold text-lg text-secondary-900'>
-              {employeeSummary.length}
-            </div>
-            <div className='text-secondary-500'>Total Employees</div>
-          </div>
-          <div className='text-center'>
-            <div className='font-semibold text-lg text-blue-600'>
-              {employeeSummary.reduce((sum, emp) => sum + emp.totalTasks, 0)}
-            </div>
-            <div className='text-secondary-500'>Total Tasks</div>
-          </div>
-          <div className='text-center'>
-            <div className='font-semibold text-lg text-green-600'>
-              {employeeSummary.reduce(
-                (sum, emp) => sum + emp.completedTasks,
-                0
-              )}
-            </div>
-            <div className='text-secondary-500'>Completed Tasks</div>
-          </div>
-          <div className='text-center'>
-            <div className='font-semibold text-lg text-primary-600'>
-              {employeeSummary.length > 0
-                ? (
-                    employeeSummary.reduce(
-                      (sum, emp) => sum + emp.completionRate,
-                      0
-                    ) / employeeSummary.length
-                  ).toFixed(1)
-                : 0}
-              %
-            </div>
-            <div className='text-secondary-500'>Avg. Completion</div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

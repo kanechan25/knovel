@@ -5,6 +5,10 @@ export interface User {
   createdAt?: string;
 }
 
+export interface FormProps {
+  onToggleForm: () => void;
+}
+
 export interface AuthResponse {
   token: string;
   user: User;
@@ -75,4 +79,16 @@ export interface ApiError {
     field: string;
     message: string;
   }>;
+}
+export interface PasswordInputProps {
+  id: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  required?: boolean;
+  minLength?: number;
+  className?: string;
+  label?: string;
 }

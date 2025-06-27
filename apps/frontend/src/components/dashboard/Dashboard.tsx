@@ -1,23 +1,12 @@
 import React, { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
-import { useTaskStore } from '../../stores/taskStore';
 import TaskList from '../tasks/TaskList';
 import TaskFormModal from '../tasks/TaskFormModal';
 import EmployeeSummary from '../tasks/EmployeeSummary';
-import Stats from '../tasks/Stats';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuthStore();
-  const { tasks } = useTaskStore();
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-  const totalTasks = tasks.length;
-  const completedTasks = tasks.filter(
-    (task) => task.status === 'COMPLETED'
-  ).length;
-  const inProgressTasks = tasks.filter(
-    (task) => task.status === 'IN_PROGRESS'
-  ).length;
-  const pendingTasks = tasks.filter((task) => task.status === 'PENDING').length;
 
   return (
     <div className='max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8'>
@@ -43,7 +32,6 @@ const Dashboard: React.FC = () => {
           )}
         </div>
       </div>
-
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
         <div className='lg:col-span-2 space-y-6'>
           <div className='card'>
@@ -72,12 +60,6 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           )}
-          <Stats
-            totalTasks={totalTasks}
-            completedTasks={completedTasks}
-            inProgressTasks={inProgressTasks}
-            pendingTasks={pendingTasks}
-          />
         </div>
       </div>
       <TaskFormModal

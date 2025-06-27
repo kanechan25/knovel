@@ -3,13 +3,9 @@ import { toast } from 'react-toastify';
 import { useAuthStore } from '../../stores/authStore';
 import { authAPI } from '../../services/api';
 import PasswordInput from '../common/PasswordInput';
-import type { SigninRequest } from '../../types';
+import type { FormProps, SigninRequest } from '../../types';
 
-interface LoginFormProps {
-  onToggleForm: () => void;
-}
-
-const LoginForm: React.FC<LoginFormProps> = ({ onToggleForm }) => {
+const LoginForm: React.FC<FormProps> = ({ onToggleForm }) => {
   const [formData, setFormData] = useState<SigninRequest>({
     username: '',
     password: '',

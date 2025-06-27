@@ -3,13 +3,9 @@ import { toast } from 'react-toastify';
 import { useAuthStore } from '../../stores/authStore';
 import { authAPI } from '../../services/api';
 import PasswordInput from '../common/PasswordInput';
-import type { SignupRequest } from '../../types';
+import type { FormProps, SignupRequest } from '../../types';
 
-interface SignupFormProps {
-  onToggleForm: () => void;
-}
-
-const SignupForm: React.FC<SignupFormProps> = ({ onToggleForm }) => {
+const SignupForm: React.FC<FormProps> = ({ onToggleForm }) => {
   const setAuth = useAuthStore((state) => state.setAuth);
   const [formData, setFormData] = useState<SignupRequest>({
     username: '',

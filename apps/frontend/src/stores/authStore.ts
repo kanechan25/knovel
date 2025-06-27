@@ -1,6 +1,6 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import type { User } from "../types";
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import type { User } from '../types';
 
 interface AuthState {
   user: User | null;
@@ -35,22 +35,22 @@ export const useAuthStore = create<AuthState>()(
 
       isEmployer: () => {
         const { user } = get();
-        return user?.role === "EMPLOYER";
+        return user?.role === 'EMPLOYER';
       },
 
       isEmployee: () => {
         const { user } = get();
-        return user?.role === "EMPLOYEE";
+        return user?.role === 'EMPLOYEE';
       },
     }),
     {
-      name: "auth-storage",
+      name: 'auth-storage',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
         token: state.token,
         isAuthenticated: state.isAuthenticated,
       }),
-    },
-  ),
+    }
+  )
 );

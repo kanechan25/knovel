@@ -1,7 +1,7 @@
 export interface User {
   id: string;
   username: string;
-  role: "EMPLOYER" | "EMPLOYEE";
+  role: 'EMPLOYER' | 'EMPLOYEE';
   createdAt?: string;
 }
 
@@ -13,7 +13,7 @@ export interface AuthResponse {
 export interface SignupRequest {
   username: string;
   password: string;
-  role: "EMPLOYER" | "EMPLOYEE";
+  role: 'EMPLOYER' | 'EMPLOYEE';
 }
 
 export interface SigninRequest {
@@ -25,7 +25,7 @@ export interface Task {
   id: string;
   title: string;
   description?: string;
-  status: "PENDING" | "IN_PROGRESS" | "COMPLETED";
+  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
   dueDate?: string;
   createdAt: string;
   updatedAt: string;
@@ -49,16 +49,16 @@ export interface CreateTaskRequest {
 export interface UpdateTaskRequest {
   title?: string;
   description?: string;
-  status?: "PENDING" | "IN_PROGRESS" | "COMPLETED";
+  status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
   assignedToId?: string;
   dueDate?: string;
 }
 
 export interface TaskFilters {
   assignedToId?: string;
-  status?: "PENDING" | "IN_PROGRESS" | "COMPLETED";
-  sortBy?: "createdAt" | "dueDate" | "status";
-  sortOrder?: "asc" | "desc";
+  status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
+  sortBy?: 'createdAt' | 'dueDate' | 'status';
+  sortOrder?: 'asc' | 'desc';
 }
 
 export interface EmployeeSummary {

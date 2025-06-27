@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import type { Task, TaskFilters, EmployeeSummary, User } from "../types";
+import { create } from 'zustand';
+import type { Task, TaskFilters, EmployeeSummary, User } from '../types';
 
 interface TaskState {
   tasks: Task[];
@@ -22,7 +22,7 @@ interface TaskState {
   // Computed getters
   getFilteredTasks: () => Task[];
   getTaskById: (taskId: string) => Task | undefined;
-  getTasksByStatus: (status: Task["status"]) => Task[];
+  getTasksByStatus: (status: Task['status']) => Task[];
 }
 
 export const useTaskStore = create<TaskState>((set, get) => ({
@@ -42,7 +42,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   updateTask: (taskId, updatedTask) =>
     set((state) => ({
       tasks: state.tasks.map((task) =>
-        task.id === taskId ? { ...task, ...updatedTask } : task,
+        task.id === taskId ? { ...task, ...updatedTask } : task
       ),
     })),
 
@@ -70,13 +70,13 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
     if (filters.assignedToId) {
       filteredTasks = filteredTasks.filter(
-        (task) => task.assignedTo?.id === filters.assignedToId,
+        (task) => task.assignedTo?.id === filters.assignedToId
       );
     }
 
     if (filters.status) {
       filteredTasks = filteredTasks.filter(
-        (task) => task.status === filters.status,
+        (task) => task.status === filters.status
       );
     }
 
@@ -88,7 +88,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         if (aValue === undefined || bValue === undefined) return 0;
 
         const comparison = aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-        return filters.sortOrder === "asc" ? comparison : -comparison;
+        return filters.sortOrder === 'asc' ? comparison : -comparison;
       });
     }
 

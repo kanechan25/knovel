@@ -55,14 +55,14 @@ class AuthService {
     });
     if (!user) {
       logger.warn(`Signin failed: User ${data.username} not found`);
-      throw new AppError('Invalid credentials', 401);
+      throw new AppError('Invalid credentials: User not found', 401);
     }
 
     // Verify password
     const isValidPassword = await bcrypt.compare(data.password, user.password);
     if (!isValidPassword) {
       logger.warn(`Signin failed: Invalid password for ${data.username}`);
-      throw new AppError('Invalid credentials', 401);
+      throw new AppError('Invalid credentials: Invalid password', 401);
     }
 
     logger.info(`User signed in successfully: ${user.username}`);

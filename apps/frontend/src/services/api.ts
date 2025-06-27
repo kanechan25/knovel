@@ -40,9 +40,8 @@ api.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ApiError>) => {
     if (error.response?.status === 401) {
-      // Unauthorized - clear auth and redirect to login
       useAuthStore.getState().clearAuth();
-      toast.error('Session expired. Please login again.');
+      toast.error(error.response.data.error);
     } else if (error.response?.status === 403) {
       toast.error('Access denied. Insufficient permissions.');
     } else if (error?.response?.status && error.response.status >= 500) {

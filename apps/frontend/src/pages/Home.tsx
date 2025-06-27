@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../stores/authStore';
 import { useTaskStore } from '../stores/taskStore';
 import { taskAPI } from '../services/api';
-
-// Components
 import LoginForm from '../components/auth/LoginForm';
 import SignupForm from '../components/auth/SignupForm';
 import Navbar from '../components/layout/Navbar';
@@ -15,7 +13,6 @@ const Home: React.FC = () => {
   const { setTasks, setEmployees, setEmployeeSummary, setLoading } =
     useTaskStore();
 
-  // Load initial data when authenticated
   useEffect(() => {
     const loadInitialData = async () => {
       if (!isAuthenticated) return;

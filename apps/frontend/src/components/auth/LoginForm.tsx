@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAuthStore } from '../../stores/authStore';
 import { authAPI } from '../../services/api';
+import PasswordInput from '../common/PasswordInput';
 import type { SigninRequest } from '../../types';
 
 interface LoginFormProps {
@@ -45,7 +46,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggleForm }) => {
           Sign In
         </h2>
         <p className='text-center text-secondary-600 mt-2'>
-          Welcome back to Task Manager
+          Welcome back to Task Management
         </p>
       </div>
       <div className='card-body'>
@@ -64,24 +65,29 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggleForm }) => {
               className='form-input'
               placeholder='Enter your username'
               disabled={loading}
+              minLength={6}
+              maxLength={30}
+              pattern='[a-zA-Z0-9_]+'
             />
+            <p className='text-xs text-secondary-500 mt-1'>
+              6-30 characters: letters, numbers, and underscores only
+            </p>
           </div>
 
           <div>
-            <label htmlFor='password' className='form-label'>
-              Password
-            </label>
-            <input
+            <PasswordInput
               id='password'
               name='password'
-              type='password'
-              required
               value={formData.password}
               onChange={handleChange}
-              className='form-input'
+              label='Password'
               placeholder='Enter your password'
               disabled={loading}
+              minLength={6}
             />
+            <p className='text-xs text-secondary-500 mt-1'>
+              Minimum 6 characters required
+            </p>
           </div>
 
           <button
@@ -105,7 +111,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggleForm }) => {
               <button
                 type='button'
                 onClick={onToggleForm}
-                className='font-medium text-primary-600 hover:text-primary-500'
+                className='font-medium text-primary-600 hover:text-primary-500 hover:font-bold'
               >
                 Sign up here
               </button>

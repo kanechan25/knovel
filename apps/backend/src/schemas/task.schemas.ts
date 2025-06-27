@@ -1,11 +1,26 @@
 import { z } from 'zod';
 
+// Custom CUID validation (format: c + 24 alphanumeric characters)
+const cuidRegex = /^c[a-z0-9]{24}$/;
+const cuid = () => z.string().regex(cuidRegex, 'Invalid ID format');
+
+// Custom date validation that accepts YYYY-MM-DD and converts to ISO datetime
+const dateString = () =>
+  z.string().refine((date) => {
+    // Accept YYYY-MM-DD format and validate it's a valid date
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(date)) return false;
+
+    const parsedDate = new Date(date);
+    return !isNaN(parsedDate.getTime());
+  }, 'Invalid date format (expected YYYY-MM-DD)');
+
 export const createTaskSchema = z.object({
   body: z.object({
     title: z.string().min(1, 'Title is required').max(200, 'Title must not exceed 200 characters'),
     description: z.string().max(1000, 'Description must not exceed 1000 characters').optional(),
-    assignedToId: z.string().uuid('Invalid user ID').optional(),
-    dueDate: z.string().datetime('Invalid date format').optional(),
+    assignedToId: cuid().optional(),
+    dueDate: dateString().optional(),
   }),
 });
 
@@ -20,20 +35,20 @@ export const updateTaskSchema = z.object({
         }),
       })
       .optional(),
-    assignedToId: z.string().uuid('Invalid user ID').optional(),
-    dueDate: z.string().datetime('Invalid date format').optional(),
+    assignedToId: cuid().optional(),
+    dueDate: dateString().optional(),
   }),
 });
 
 export const taskParamSchema = z.object({
   params: z.object({
-    id: z.string().uuid('Invalid task ID'),
+    id: cuid(),
   }),
 });
 
 export const taskQuerySchema = z.object({
   query: z.object({
-    assignedToId: z.string().uuid('Invalid user ID').optional(),
+    assignedToId: cuid().optional(),
     status: z.enum(['PENDING', 'IN_PROGRESS', 'COMPLETED']).optional(),
     sortBy: z.enum(['createdAt', 'dueDate', 'status']).default('createdAt'),
     sortOrder: z.enum(['asc', 'desc']).default('desc'),

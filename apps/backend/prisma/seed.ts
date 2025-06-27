@@ -61,7 +61,7 @@ async function main() {
       status: TaskStatus.COMPLETED,
       createdById: employer1.id,
       assignedToId: employee1.id,
-      dueDate: new Date('2024-01-15'),
+      dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
     },
     {
       title: 'Design database schema',
@@ -69,7 +69,7 @@ async function main() {
       status: TaskStatus.IN_PROGRESS,
       createdById: employer1.id,
       assignedToId: employee1.id,
-      dueDate: new Date('2024-01-20'),
+      dueDate: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000),
     },
     {
       title: 'Create React components',
@@ -77,7 +77,7 @@ async function main() {
       status: TaskStatus.PENDING,
       createdById: employer1.id,
       assignedToId: employee2.id,
-      dueDate: new Date('2024-01-25'),
+      dueDate: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000),
     },
     {
       title: 'Write API documentation',
@@ -85,7 +85,7 @@ async function main() {
       status: TaskStatus.PENDING,
       createdById: employer1.id,
       assignedToId: employee3.id,
-      dueDate: new Date('2024-01-30'),
+      dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
     },
     {
       title: 'Setup CI/CD pipeline',
@@ -93,7 +93,7 @@ async function main() {
       status: TaskStatus.IN_PROGRESS,
       createdById: employer2.id,
       assignedToId: employee2.id,
-      dueDate: new Date('2024-02-05'),
+      dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
     },
     {
       title: 'Performance optimization',
@@ -101,7 +101,7 @@ async function main() {
       status: TaskStatus.COMPLETED,
       createdById: employer2.id,
       assignedToId: employee1.id,
-      dueDate: new Date('2024-01-10'),
+      dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
     },
     {
       title: 'Security audit',
@@ -109,7 +109,7 @@ async function main() {
       status: TaskStatus.PENDING,
       createdById: employer2.id,
       assignedToId: employee3.id,
-      dueDate: new Date('2024-02-10'),
+      dueDate: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000),
     },
   ];
 

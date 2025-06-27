@@ -8,7 +8,6 @@ interface TaskState {
   loading: boolean;
   filters: TaskFilters;
 
-  // Actions
   setTasks: (tasks: Task[]) => void;
   addTask: (task: Task) => void;
   updateTask: (taskId: string, updatedTask: Partial<Task>) => void;
@@ -19,7 +18,6 @@ interface TaskState {
   setFilters: (filters: Partial<TaskFilters>) => void;
   clearFilters: () => void;
 
-  // Computed getters
   getFilteredTasks: () => Task[];
   getTaskById: (taskId: string) => Task | undefined;
   getTasksByStatus: (status: Task['status']) => Task[];

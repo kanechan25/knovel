@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAuthStore } from '../../stores/authStore';
 import { useTaskStore } from '../../stores/taskStore';
@@ -9,36 +9,20 @@ import dayjs from 'dayjs';
 const TaskList: React.FC = () => {
   const { user } = useAuthStore();
   const {
-    tasks,
     employees,
     loading,
-    setTasks,
-    setLoading,
     updateTask,
     removeTask,
     filters,
     setFilters,
+    getFilteredTasks,
   } = useTaskStore();
 
   const [statusUpdateLoading, setStatusUpdateLoading] = useState<string | null>(
     null
   );
 
-  const loadTasks = async () => {
-    setLoading(true);
-    try {
-      const tasksData = await taskAPI.getTasks(filters);
-      setTasks(tasksData);
-    } catch (error) {
-      console.error('Failed to load tasks:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadTasks();
-  }, [filters]);
+  const tasks = getFilteredTasks();
 
   const handleStatusUpdate = async (taskId: string, status: Task['status']) => {
     setStatusUpdateLoading(taskId);
@@ -212,17 +196,28 @@ const TaskList: React.FC = () => {
               key={task.id}
               className='bg-white border border-secondary-200 rounded-lg p-6'
             >
-              <div className='flex items-start justify-between'>
-                <div className='flex-1'>
-                  <div className='flex items-center space-x-3 mb-2'>
-                    <h3 className='text-lg font-medium text-secondary-900'>
-                      {task.title}
-                    </h3>
-                    <span
-                      className={`badge ${getStatusBadgeClass(task.status)}`}
-                    >
-                      {getStatusDisplayName(task.status)}
-                    </span>
+              <div className=''>
+                <div className='flex-1 w-full'>
+                  <div className='flex items-center justify-between space-x-3 mb-2'>
+                    <div className='flex items-center space-x-3'>
+                      <h3 className='text-lg font-medium text-secondary-900'>
+                        {task.title}
+                      </h3>
+                      <span
+                        className={`badge ${getStatusBadgeClass(task.status)}`}
+                      >
+                        {getStatusDisplayName(task.status)}
+                      </span>
+                    </div>
+                    {/* Delete button (for task creators) */}
+                    {canDelete(task) && (
+                      <button
+                        onClick={() => handleDeleteTask(task.id)}
+                        className='btn-danger text-sm'
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
 
                   {task.description && (
@@ -231,7 +226,7 @@ const TaskList: React.FC = () => {
                     </p>
                   )}
 
-                  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-secondary-500'>
+                  <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 text-sm text-secondary-500'>
                     <div>
                       <span className='font-medium'>Created by:</span>{' '}
                       {task.createdBy.username}
@@ -253,11 +248,11 @@ const TaskList: React.FC = () => {
                   </div>
                 </div>
 
-                <div className='ml-4 flex items-center space-x-2'>
+                <div className=' flex items-center space-x-2'>
                   {/* Status Update (for assigned employees) */}
                   {canUpdateStatus(task) && (
-                    <div className='flex items-center space-x-2'>
-                      <label className='text-sm font-medium text-secondary-700'>
+                    <div className='flex items-center space-x-2 mt-2'>
+                      <label className='text-sm w-[200px] font-medium text-secondary-700'>
                         Update Status:
                       </label>
                       <select
@@ -279,16 +274,6 @@ const TaskList: React.FC = () => {
                         <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-primary-600'></div>
                       )}
                     </div>
-                  )}
-
-                  {/* Delete button (for task creators) */}
-                  {canDelete(task) && (
-                    <button
-                      onClick={() => handleDeleteTask(task.id)}
-                      className='btn-danger text-sm'
-                    >
-                      Delete
-                    </button>
                   )}
                 </div>
               </div>

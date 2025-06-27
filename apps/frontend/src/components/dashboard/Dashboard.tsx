@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 import { useTaskStore } from '../../stores/taskStore';
 import TaskList from '../tasks/TaskList';
-import TaskForm from '../tasks/TaskForm';
+import TaskFormModal from '../tasks/TaskFormModal';
 import EmployeeSummary from '../tasks/EmployeeSummary';
+import Stats from '../tasks/Stats';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuthStore();
   const { tasks } = useTaskStore();
-
-  // Calculate statistics
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter(
     (task) => task.status === 'COMPLETED'
@@ -22,32 +22,30 @@ const Dashboard: React.FC = () => {
   return (
     <div className='max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8'>
       <div className='mb-8'>
-        <h1 className='text-2xl font-bold text-secondary-900'>
-          Welcome back, {user?.username}!
-        </h1>
-        <p className='text-secondary-600'>
-          {user?.role === 'EMPLOYER'
-            ? 'Manage your team and track task progress'
-            : 'View and update your assigned tasks'}
-        </p>
+        <div className='flex items-center justify-between'>
+          <div>
+            <h1 className='text-2xl font-bold text-secondary-900'>
+              Welcome back, {user?.username}!
+            </h1>
+            <p className='text-secondary-600'>
+              {user?.role === 'EMPLOYER'
+                ? 'Manage your team and track task progress'
+                : 'View and update your assigned tasks'}
+            </p>
+          </div>
+          {user?.role === 'EMPLOYER' && (
+            <button
+              onClick={() => setIsTaskModalOpen(true)}
+              className='btn-primary flex items-center space-x-2'
+            >
+              <span>Create Task</span>
+            </button>
+          )}
+        </div>
       </div>
 
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
-        {/* Main Content */}
         <div className='lg:col-span-2 space-y-6'>
-          {user?.role === 'EMPLOYER' && (
-            <div className='card'>
-              <div className='card-header'>
-                <h2 className='text-lg font-medium text-secondary-900'>
-                  Create New Task
-                </h2>
-              </div>
-              <div className='card-body'>
-                <TaskForm />
-              </div>
-            </div>
-          )}
-
           <div className='card'>
             <div className='card-header'>
               <h2 className='text-lg font-medium text-secondary-900'>
@@ -74,55 +72,18 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           )}
-
-          {/* Quick Stats */}
-          <div className='card'>
-            <div className='card-header'>
-              <h2 className='text-lg font-medium text-secondary-900'>
-                Quick Stats
-              </h2>
-            </div>
-            <div className='card-body'>
-              <div className='space-y-3'>
-                <div className='flex justify-between'>
-                  <span className='text-secondary-600'>Total Tasks:</span>
-                  <span className='font-semibold'>{totalTasks}</span>
-                </div>
-                <div className='flex justify-between'>
-                  <span className='text-secondary-600'>Completed:</span>
-                  <span className='font-semibold text-green-600'>
-                    {completedTasks}
-                  </span>
-                </div>
-                <div className='flex justify-between'>
-                  <span className='text-secondary-600'>In Progress:</span>
-                  <span className='font-semibold text-blue-600'>
-                    {inProgressTasks}
-                  </span>
-                </div>
-                <div className='flex justify-between'>
-                  <span className='text-secondary-600'>Pending:</span>
-                  <span className='font-semibold text-yellow-600'>
-                    {pendingTasks}
-                  </span>
-                </div>
-                {totalTasks > 0 && (
-                  <div className='mt-4 pt-3 border-t border-secondary-200'>
-                    <div className='flex justify-between'>
-                      <span className='text-secondary-600'>
-                        Completion Rate:
-                      </span>
-                      <span className='font-semibold text-primary-600'>
-                        {Math.round((completedTasks / totalTasks) * 100)}%
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          <Stats
+            totalTasks={totalTasks}
+            completedTasks={completedTasks}
+            inProgressTasks={inProgressTasks}
+            pendingTasks={pendingTasks}
+          />
         </div>
       </div>
+      <TaskFormModal
+        isOpen={isTaskModalOpen}
+        onClose={() => setIsTaskModalOpen(false)}
+      />
     </div>
   );
 };

@@ -5,7 +5,11 @@ import { taskAPI } from '../../services/api';
 import type { CreateTaskRequest } from '../../types';
 import dayjs from 'dayjs';
 
-const TaskForm: React.FC = () => {
+interface TaskFormProps {
+  onSuccess?: () => void;
+}
+
+const TaskForm: React.FC<TaskFormProps> = ({ onSuccess }) => {
   const { employees, addTask } = useTaskStore();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<CreateTaskRequest>({
@@ -20,26 +24,24 @@ const TaskForm: React.FC = () => {
     setLoading(true);
 
     try {
-      // Prepare data for submission
       const taskData: CreateTaskRequest = {
         title: formData.title,
         description: formData.description || undefined,
         assignedToId: formData.assignedToId || undefined,
         dueDate: formData.dueDate || undefined,
       };
-
       const newTask = await taskAPI.createTask(taskData);
       addTask(newTask);
-
-      // Reset form
       setFormData({
         title: '',
         description: '',
         assignedToId: '',
         dueDate: '',
       });
-
       toast.success('Task created successfully!');
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error) {
       console.error('Failed to create task:', error);
     } finally {
@@ -63,7 +65,6 @@ const TaskForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className='space-y-6'>
-      {/* Task Title */}
       <div>
         <label htmlFor='title' className='form-label'>
           Task Title *
@@ -85,7 +86,6 @@ const TaskForm: React.FC = () => {
         </p>
       </div>
 
-      {/* Task Description */}
       <div>
         <label htmlFor='description' className='form-label'>
           Description
@@ -131,7 +131,6 @@ const TaskForm: React.FC = () => {
         </p>
       </div>
 
-      {/* Due Date */}
       <div>
         <label htmlFor='dueDate' className='form-label'>
           Due Date

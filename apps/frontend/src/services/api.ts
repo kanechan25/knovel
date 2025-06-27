@@ -14,7 +14,6 @@ import type {
   ApiError,
 } from '../types';
 
-// Create axios instance
 const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
   timeout: 10000,
@@ -23,7 +22,7 @@ const api: AxiosInstance = axios.create({
   },
 });
 
-// Request interceptor to add auth token
+// interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
     const token = useAuthStore.getState().token;
@@ -35,7 +34,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor for error handling
+// interceptor for error handling
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ApiError>) => {

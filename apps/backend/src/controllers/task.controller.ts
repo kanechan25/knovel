@@ -47,11 +47,6 @@ export const deleteTask = asyncHandler(async (req: AuthRequest, res: Response) =
   res.status(204).send();
 });
 
-export const getEmployeeSummary = asyncHandler(async (req: AuthRequest, res: Response) => {
-  const summary = await taskService.getEmployeeSummary(req.user!.id);
-  res.status(200).json(summary);
-});
-
 export const getEmployees = asyncHandler(async (req: AuthRequest, res: Response) => {
   const employees = await taskService.getEmployees();
   res.status(200).json(employees);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useAuthStore } from '../../stores/authStore';
+import { useAuthStore } from '../../stores/auth.store';
 import { authAPI } from '../../services/api';
 import PasswordInput from '../common/PasswordInput';
 import type { FormProps, SigninRequest } from '../../types';

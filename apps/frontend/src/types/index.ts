@@ -73,6 +73,20 @@ export interface EmployeeSummary {
   completionRate: number;
 }
 
+export interface TaskStats {
+  total: number;
+  completed: number;
+  inProgress: number;
+  pending: number;
+  completionRate: number;
+}
+
+export interface SummaryData {
+  employeeSummary: EmployeeSummary[];
+  taskStats: TaskStats;
+  totalEmployees: number;
+}
+
 export interface ApiError {
   error: string;
   errors?: Array<{

@@ -13,7 +13,6 @@ interface TaskState {
   updateTask: (taskId: string, updatedTask: Partial<Task>) => void;
   removeTask: (taskId: string) => void;
   setEmployees: (employees: User[]) => void;
-  setEmployeeSummary: (summary: EmployeeSummary[]) => void;
   setLoading: (loading: boolean) => void;
   setFilters: (filters: Partial<TaskFilters>) => void;
   clearFilters: () => void;
@@ -31,53 +30,42 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   filters: {},
 
   setTasks: (tasks) => set({ tasks }),
-
   addTask: (task) =>
     set((state) => ({
       tasks: [task, ...state.tasks],
     })),
-
   updateTask: (taskId, updatedTask) =>
     set((state) => ({
       tasks: state.tasks.map((task) =>
         task.id === taskId ? { ...task, ...updatedTask } : task
       ),
     })),
-
   removeTask: (taskId) =>
     set((state) => ({
       tasks: state.tasks.filter((task) => task.id !== taskId),
     })),
 
   setEmployees: (employees) => set({ employees }),
-
-  setEmployeeSummary: (summary) => set({ employeeSummary: summary }),
-
   setLoading: (loading) => set({ loading }),
-
   setFilters: (filters) =>
     set((state) => ({
       filters: { ...state.filters, ...filters },
     })),
 
   clearFilters: () => set({ filters: {} }),
-
   getFilteredTasks: () => {
     const { tasks, filters } = get();
     let filteredTasks = [...tasks];
-
     if (filters.assignedToId) {
       filteredTasks = filteredTasks.filter(
         (task) => task.assignedTo?.id === filters.assignedToId
       );
     }
-
     if (filters.status) {
       filteredTasks = filteredTasks.filter(
         (task) => task.status === filters.status
       );
     }
-
     if (filters.sortBy && filters.sortOrder) {
       filteredTasks.sort((a, b) => {
         const aValue = a[filters.sortBy as keyof Task];
@@ -89,15 +77,12 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         return filters.sortOrder === 'asc' ? comparison : -comparison;
       });
     }
-
     return filteredTasks;
   },
-
   getTaskById: (taskId) => {
     const { tasks } = get();
     return tasks.find((task) => task.id === taskId);
   },
-
   getTasksByStatus: (status) => {
     const { tasks } = get();
     return tasks.filter((task) => task.status === status);

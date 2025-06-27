@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useTaskStore } from '../../stores/taskStore';
+import { useTaskStore } from '../../stores/task.store';
 import { taskAPI } from '../../services/api';
 import type { CreateTaskRequest } from '../../types';
 import dayjs from 'dayjs';

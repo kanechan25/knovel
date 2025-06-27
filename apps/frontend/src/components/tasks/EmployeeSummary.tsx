@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTaskStore } from '../../stores/taskStore';
+import { useTaskStore } from '../../stores/task.store';
 import { useSummary } from '../../hooks/useSummary';
 import {
   getCompletionRateBackground,

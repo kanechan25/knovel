@@ -1,27 +1,6 @@
 import { useMemo } from 'react';
-import { useTaskStore } from '../stores/taskStore';
-
-interface EmployeeStats {
-  id: string;
-  username: string;
-  totalTasks: number;
-  completedTasks: number;
-  completionRate: number;
-}
-
-interface TaskStats {
-  total: number;
-  completed: number;
-  inProgress: number;
-  pending: number;
-  completionRate: number;
-}
-
-interface SummaryData {
-  employeeSummary: EmployeeStats[];
-  taskStats: TaskStats;
-  totalEmployees: number;
-}
+import { useTaskStore } from '../stores/task.store';
+import type { SummaryData } from '../types';
 
 export const useSummary = (): SummaryData => {
   const { tasks } = useTaskStore();

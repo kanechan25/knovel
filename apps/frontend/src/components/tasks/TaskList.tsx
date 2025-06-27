@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useAuthStore } from '../../stores/authStore';
-import { useTaskStore } from '../../stores/taskStore';
+import { useAuthStore } from '../../stores/auth.store';
+import { useTaskStore } from '../../stores/task.store';
 import { taskAPI } from '../../services/api';
 import type { Task } from '../../types';
 import dayjs from 'dayjs';
+import {
+  getStatusBadgeClass,
+  getStatusDisplayName,
+} from '../../utils/checkStatus';
 
 const TaskList: React.FC = () => {
   const { user } = useAuthStore();
@@ -17,13 +21,10 @@ const TaskList: React.FC = () => {
     setFilters,
     getFilteredTasks,
   } = useTaskStore();
-
+  const tasks = getFilteredTasks();
   const [statusUpdateLoading, setStatusUpdateLoading] = useState<string | null>(
     null
   );
-
-  const tasks = getFilteredTasks();
-
   const handleStatusUpdate = async (taskId: string, status: Task['status']) => {
     setStatusUpdateLoading(taskId);
     try {
@@ -51,32 +52,6 @@ const TaskList: React.FC = () => {
     }
   };
 
-  const getStatusBadgeClass = (status: Task['status']) => {
-    switch (status) {
-      case 'PENDING':
-        return 'badge-pending';
-      case 'IN_PROGRESS':
-        return 'badge-in-progress';
-      case 'COMPLETED':
-        return 'badge-completed';
-      default:
-        return 'badge-pending';
-    }
-  };
-
-  const getStatusDisplayName = (status: Task['status']) => {
-    switch (status) {
-      case 'PENDING':
-        return 'Pending';
-      case 'IN_PROGRESS':
-        return 'In Progress';
-      case 'COMPLETED':
-        return 'Completed';
-      default:
-        return 'Pending';
-    }
-  };
-
   const canUpdateStatus = (task: Task) => {
     if (user?.role === 'EMPLOYEE') {
       return task.assignedTo?.id === user.id;
@@ -99,7 +74,7 @@ const TaskList: React.FC = () => {
 
   return (
     <div className='space-y-4'>
-      {/* Filters and Sorting - Only for Employers */}
+      {/* Only for Employers */}
       {user?.role === 'EMPLOYER' && (
         <div className='bg-white p-4 rounded-lg border border-secondary-200'>
           <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>

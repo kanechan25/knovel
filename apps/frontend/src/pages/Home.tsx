@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAuthStore } from '../stores/authStore';
-import { useTaskStore } from '../stores/taskStore';
+import { useAuthStore } from '../stores/auth.store';
+import { useTaskStore } from '../stores/task.store';
 import { taskAPI } from '../services/api';
 import LoginForm from '../components/auth/LoginForm';
 import SignupForm from '../components/auth/SignupForm';
@@ -10,13 +10,11 @@ import Dashboard from '../components/dashboard/Dashboard';
 const Home: React.FC = () => {
   const [showSignup, setShowSignup] = useState(false);
   const { isAuthenticated, user } = useAuthStore();
-  const { setTasks, setEmployees, setEmployeeSummary, setLoading } =
-    useTaskStore();
+  const { setTasks, setEmployees, setLoading } = useTaskStore();
 
   useEffect(() => {
     const loadInitialData = async () => {
       if (!isAuthenticated) return;
-
       setLoading(true);
       try {
         // Load tasks
@@ -25,12 +23,8 @@ const Home: React.FC = () => {
 
         // Load employees if user is an employer
         if (user?.role === 'EMPLOYER') {
-          const [employees, summary] = await Promise.all([
-            taskAPI.getEmployees(),
-            taskAPI.getEmployeeSummary(),
-          ]);
+          const employees = await taskAPI.getEmployees();
           setEmployees(employees);
-          setEmployeeSummary(summary);
         }
       } catch (error) {
         console.error('Failed to load initial data:', error);
@@ -40,14 +34,7 @@ const Home: React.FC = () => {
     };
 
     loadInitialData();
-  }, [
-    isAuthenticated,
-    user?.role,
-    setTasks,
-    setEmployees,
-    setEmployeeSummary,
-    setLoading,
-  ]);
+  }, [isAuthenticated, user?.role, setTasks, setEmployees, setLoading]);
 
   const toggleForm = () => setShowSignup(!showSignup);
 

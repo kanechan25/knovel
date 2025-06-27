@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuthStore } from '../../stores/authStore';
+import { useAuthStore } from '../../stores/auth.store';
 import TaskList from '../tasks/TaskList';
 import TaskFormModal from '../tasks/TaskFormModal';
 import EmployeeSummary from '../tasks/EmployeeSummary';

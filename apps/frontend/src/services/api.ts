@@ -1,6 +1,6 @@
 import axios, { type AxiosInstance, type AxiosError } from 'axios';
 import { toast } from 'react-toastify';
-import { useAuthStore } from '../stores/authStore';
+import { useAuthStore } from '../stores/auth.store';
 import type {
   AuthResponse,
   SignupRequest,
@@ -9,7 +9,6 @@ import type {
   CreateTaskRequest,
   UpdateTaskRequest,
   TaskFilters,
-  EmployeeSummary,
   User,
   ApiError,
 } from '../types';
@@ -108,11 +107,6 @@ export const taskAPI = {
 
   getEmployees: async (): Promise<User[]> => {
     const response = await api.get<User[]>('/tasks/employees');
-    return response.data;
-  },
-
-  getEmployeeSummary: async (): Promise<EmployeeSummary[]> => {
-    const response = await api.get<EmployeeSummary[]>('/tasks/summary');
     return response.data;
   },
 };

@@ -1,7 +1,7 @@
 import prisma from '../config/database';
 import { AppError } from '../middleware/errorHandler';
 import logger from '../config/logger';
-import type { AuthUser, CreateTaskData, UpdateTaskData, TaskFilters, EmployeeSummary } from '../types';
+import type { AuthUser, CreateTaskData, UpdateTaskData, TaskFilters } from '../types';
 
 class TaskService {
   async createTask(data: CreateTaskData, createdBy: AuthUser) {
@@ -179,40 +179,6 @@ class TaskService {
       where: { id },
     });
     logger.info(`Task ${id} deleted successfully`);
-  }
-
-  async getEmployeeSummary(employerId: string): Promise<EmployeeSummary[]> {
-    logger.info(`Getting employee summary for employer ${employerId}`);
-    const employees = await prisma.user.findMany({
-      where: { role: 'EMPLOYEE' },
-      select: {
-        id: true,
-        username: true,
-        assignedTasks: {
-          where: {
-            createdById: employerId, // filter by created by
-          },
-          select: {
-            status: true,
-          },
-        },
-      },
-    });
-
-    const summary = employees.map((employee) => {
-      const totalTasks = employee.assignedTasks.length;
-      const completedTasks = employee.assignedTasks.filter((task) => task.status === 'COMPLETED').length;
-      const completionRate = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-      return {
-        id: employee.id,
-        username: employee.username,
-        totalTasks,
-        completedTasks,
-        completionRate: Math.round(completionRate * 100) / 100, // Round 2 decimal
-      };
-    });
-    logger.debug(`Employee summary generated for ${employees.length} employees`);
-    return summary;
   }
 
   async getEmployees() {

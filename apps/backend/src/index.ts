@@ -44,9 +44,11 @@ try {
   process.exit(1);
 }
 
-app.listen(env.PORT, () => {
-  logger.info(`Server running on port ${env.PORT}`);
-  logger.info(`Check health API: http://localhost:${env.PORT}/health`);
+const PORT = Number(process.env.PORT) || env.PORT || 5000;
+
+app.listen(PORT, '0.0.0.0', () => {
+  logger.info(`Server running on port ${PORT}`);
+  logger.info(`Check health API: http://localhost:${PORT}/health`);
   logger.info(`Environment: ${env.NODE_ENV}`);
 });
 

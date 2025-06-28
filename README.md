@@ -6,7 +6,7 @@ Experience the application live at: [Task Management Application](https://knovel
 
 ### 🔗 API Health Check
 
-Backend API is running at: [Backend Health Check](https://knovel-be.onrender.com/health)
+Backend API (spins down on idle) at: [Backend Health Check](https://knovel-be.onrender.com/health)
 
 ## ✨ Features
 

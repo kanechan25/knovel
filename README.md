@@ -90,10 +90,7 @@
 
    - **Frontend**: http://localhost:3000
    - **Backend API**: http://localhost:5000
-
-   Create postgresql db name `task_management` with user is `user` and password is `password`
-
-   - **Database**: psql postgresql://user:password@localhost:5432/task_management
+   - **Database**: psql postgresql://kane:password@localhost:5432/mydb
 
 ### Option 2: Local Development
 
@@ -126,7 +123,7 @@ npm run dev
 #### Backend (.env)
 
 ```env
-DATABASE_URL="postgresql://user:password@localhost:5432/task_management?schema=public"
+DATABASE_URL="postgresql://kane:password@localhost:5432/mydb?schema=public"
 PORT=5000
 NODE_ENV=development
 JWT_SECRET="your_super_secret_jwt_key_here"

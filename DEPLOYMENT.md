@@ -45,7 +45,7 @@ Create environment files:
 **Backend (.env)**:
 
 ```bash
-DATABASE_URL="postgresql://user:password@postgres:5432/yourdb?schema=public"
+DATABASE_URL="postgresql://kane:password@postgres:5432/mydb?schema=public"
 PORT=5000
 NODE_ENV=development
 JWT_SECRET=your_super_secret_jwt_key_here

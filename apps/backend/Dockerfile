@@ -1,4 +1,3 @@
-
 FROM node:18-alpine
 
 WORKDIR /app
@@ -6,11 +5,12 @@ WORKDIR /app
 RUN apk add --no-cache postgresql-client curl
 
 COPY package*.json ./
-
-RUN npm ci --only=production && npm cache clean --force
-
 COPY prisma ./prisma/
 
+# Install dependencies without running postinstall script
+RUN npm ci --ignore-scripts && npm cache clean --force
+
+# Now generate Prisma client after schema is available
 RUN npx prisma generate
 
 COPY . .
@@ -26,7 +26,7 @@ set -e
 
 echo "Starting backend application..."
 echo "Waiting for database to be ready..."
-until pg_isready -h postgres -p 5432 -U user; do
+until pg_isready -h postgres -p 5432 -U kane -d mydb; do
   echo "Database is unavailable - sleeping"
   sleep 2
 done
@@ -35,12 +35,11 @@ echo "Database is ready!"
 echo "Running database migrations..."
 npx prisma migrate deploy
 echo "🌱 Seeding database..."
-npx prisma db seed
+npx prisma db seed || echo "Seeding failed, continuing anyway..."
 
 echo "Starting the server..."
 npm start
 EOF
-
 
 RUN chown -R backend:nodejs /app && chmod +x /app/start.sh
 USER backend

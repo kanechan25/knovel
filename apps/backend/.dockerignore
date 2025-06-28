@@ -21,7 +21,5 @@ Thumbs.db
 *.swo
 *~
 dist
-generated
 .prettierrc
-eslint.config.js
-tsconfig.json 
+eslint.config.js 

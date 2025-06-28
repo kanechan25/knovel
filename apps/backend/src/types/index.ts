@@ -1,13 +1,16 @@
-import type { UserRole, TaskStatus } from '../../generated/prisma';
+import type { UserRole, TaskStatus } from '@prisma/client';
+
 export interface AuthUser {
   id: string;
   username: string;
   role: UserRole;
 }
+
 export interface AuthResponse {
   token: string;
   user: AuthUser;
 }
+
 export interface SignupData {
   username: string;
   password: string;
@@ -66,3 +69,31 @@ export interface TaskResponse {
     username: string;
   };
 }
+
+export interface CreateUserDto {
+  username: string;
+  password: string;
+  role: UserRole;
+}
+
+export interface LoginDto {
+  username: string;
+  password: string;
+}
+
+export interface CreateTaskDto {
+  title: string;
+  description?: string;
+  assignedToId?: string;
+  dueDate?: Date;
+}
+
+export interface UpdateTaskDto {
+  title?: string;
+  description?: string;
+  status?: TaskStatus;
+  assignedToId?: string;
+  dueDate?: Date;
+}
+
+export { UserRole, TaskStatus };

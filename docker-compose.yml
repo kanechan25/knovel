@@ -3,12 +3,12 @@ version: "3.8"
 services:
   # PostgreSQL Database
   postgres:
-    image: postgres:15-alpine
+    image: postgres:16
     container_name: task-manager-db
     environment:
-      POSTGRES_USER: user
+      POSTGRES_DB: mydb
+      POSTGRES_USER: kane
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: task_management
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
     ports:
       - "5432:5432"
@@ -17,7 +17,7 @@ services:
     networks:
       - task-manager-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d task_management"]
+      test: ["CMD-SHELL", "pg_isready -U kane -d mydb"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -33,8 +33,8 @@ services:
     environment:
       PORT: 5000
       NODE_ENV: production
-      JWT_SECRET: your_super_secret_jwt_key_here_please_change_in_production_very_long_and_secure_key_123456789
-      DATABASE_URL: postgresql://user:password@postgres:5432/task_management?schema=public
+      JWT_SECRET: kanechan_0205_knovel
+      DATABASE_URL: postgresql://kane:password@postgres:5432/mydb?schema=public
       FRONTEND_URL: http://localhost:3000
     ports:
       - "5000:5000"

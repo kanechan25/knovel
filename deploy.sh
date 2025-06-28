@@ -59,12 +59,11 @@ create_env_files() {
     if [ ! -f "apps/backend/.env" ]; then
         print_warning "Backend .env file not found. Creating with default values..."
         cat > apps/backend/.env << 'EOF'
-DATABASE_URL="postgresql://user:password@postgres:5432/task_management?schema=public"
+DATABASE_URL="postgresql://kane:password@localhost:5432/mydb?schema=public"
 PORT=5000
 NODE_ENV=production
-JWT_SECRET=your_super_secret_jwt_key_here_please_change_in_production_very_long_and_secure_key_123456789
-
-FRONTEND_URL=http://localhost:5173
+JWT_SECRET=kanechan_0205_knovel
+FRONTEND_URL=http://localhost:3000
 EOF
         print_warning "Please update the JWT_SECRET in apps/backend/.env before production deployment!"
         print_status "CORS automatically allows ports 5173, 3000, 3001 for both dev and Docker"

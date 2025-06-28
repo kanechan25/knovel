@@ -12,13 +12,13 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
       return;
     }
 
-    const taskData: CreateTaskDto = req.body;
+    const taskData = req.body;
     const user = { id: req.user!.userId, username: req.user!.userId, role: req.user!.role };
 
-    // Convert Date to string for service
+    // Convert to service data format (dueDate should be string)
     const serviceData = {
       ...taskData,
-      dueDate: taskData.dueDate ? taskData.dueDate.toISOString() : undefined
+      dueDate: taskData.dueDate ? taskData.dueDate : undefined
     };
 
     const task = await taskService.createTask(serviceData, user);

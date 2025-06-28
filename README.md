@@ -1,13 +1,5 @@
 # 🚀 Task Management Application
 
-### 🌐 Live Demo
-
-Experience the application live at: [Task Management Application](https://knovel-fe.vercel.app/)
-
-### 🔗 API Health Check
-
-Backend API (spins down on idle) at: [Backend Health Check](https://knovel-be.onrender.com/health)
-
 ## ✨ Features
 
 ### 👔 For Employers
@@ -125,6 +117,24 @@ cp .env.example .env
 npm run dev
 ```
 
+### Environment Variables
+
+#### Backend (.env)
+
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/task_management?schema=public"
+PORT=5000
+NODE_ENV=development
+JWT_SECRET="your_super_secret_jwt_key_here"
+FRONTEND_URL="http://localhost:5173" or "http://localhost:3000"
+```
+
+#### Frontend (.env)
+
+```env
+VITE_API_URL="http://localhost:5000"
+```
+
 ## 🔐 Demo Credentials
 
 The application comes pre-seeded with demo accounts:
@@ -156,22 +166,3 @@ The application comes pre-seeded with demo accounts:
 ### System
 
 - `GET /health` - Health check endpoint with system info
-
-### Environment Variables
-
-#### Backend (.env)
-
-```env
-# Database
-DATABASE_URL="postgresql://user:password@localhost:5432/task_management?schema=public"
-PORT=5000
-NODE_ENV=development
-JWT_SECRET="your_super_secret_jwt_key_here"
-FRONTEND_URL="http://localhost:5173"
-```
-
-#### Frontend (.env)
-
-```env
-VITE_API_URL="http://localhost:5000"
-```

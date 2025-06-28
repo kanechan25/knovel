@@ -1,15 +1,13 @@
 #!/bin/bash
 
-set -e  # Exit on any error
+set -e
 
-# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-# Function to print colored output
 print_status() {
     echo -e "${BLUE}[INFO]${NC} $1"
 }
@@ -30,7 +28,6 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Check prerequisites
 check_prerequisites() {
     print_status "Checking prerequisites..."
     
@@ -52,7 +49,6 @@ check_prerequisites() {
     print_success "All prerequisites are met!"
 }
 
-# Function to create environment files if they don't exist
 create_env_files() {
     print_status "Checking environment files..."
     
@@ -79,7 +75,6 @@ EOF
     print_success "Environment files are ready!"
 }
 
-# Function to clean up previous deployments
 cleanup() {
     print_status "Cleaning up previous deployments..."
     docker-compose down > /dev/null 2>&1 || true
@@ -90,7 +85,6 @@ cleanup() {
     print_success "Cleanup completed!"
 }
 
-# Function to build and start services
 deploy() {
     print_status "Building and starting services..."
     if docker-compose up --build -d; then
@@ -101,7 +95,6 @@ deploy() {
     fi
 }
 
-# Function to wait for services to be healthy
 wait_for_health() {
     print_status "Waiting for services to be healthy..."
     
@@ -131,7 +124,6 @@ wait_for_health() {
     print_success "All services are healthy!"
 }
 
-# Function to show deployment status
 show_status() {
     print_status "Deployment Status:"
     echo "=================================="
@@ -154,7 +146,6 @@ show_status() {
     echo "   Restart: docker-compose restart"
 }
 
-# Function to show help
 show_help() {
     echo "Task Management App Deployment Script"
     echo ""
@@ -172,13 +163,11 @@ show_help() {
     echo "  $0 --quick          Quick deployment without health checks"
 }
 
-# Main execution
 main() {
     local clean_images=false
     local skip_cleanup=false
     local skip_health=false
     
-    # Parse command line arguments
     while [[ $# -gt 0 ]]; do
         case $1 in
             --help)
@@ -219,15 +208,11 @@ main() {
             cleanup
         fi
     fi
-    
     deploy
-    
     if [ "$skip_health" = false ]; then
         wait_for_health
     fi
-    
     show_status
-    
     print_success "🎉 Deployment completed successfully!"
 }
 

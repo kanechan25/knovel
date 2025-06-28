@@ -86,11 +86,21 @@
    docker-compose up --build -d
    ```
 
-3. **Access the application**:
+   ```bash
+   - All services include health checks:
+   docker-compose ps
+   docker-compose logs backend
+   docker-compose logs frontend
+   docker-compose logs postgres
+   - Access to database container:
+   docker exec -it task-manager-db psql -U kane -d mydb
+   ```
 
-   - **Frontend**: http://localhost:3000
-   - **Backend API**: http://localhost:5000
-   - **Database**: psql postgresql://kane:password@localhost:5432/mydb
+3. **Access the container Docker**:
+
+   - **task-manager-frontend**: http://localhost:3000
+   - **task-manager-backend**: http://localhost:5000
+   - **task-manager-db**: psql postgresql://kane:password@localhost:5432/mydb
 
 ### Option 2: Local Development
 

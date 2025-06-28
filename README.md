@@ -87,9 +87,13 @@
    ```
 
 3. **Access the application**:
+
    - **Frontend**: http://localhost:3000
    - **Backend API**: http://localhost:5000
-   - **Database**: psql postgresql://user:password@localhost:5432/yourdb
+
+   Create postgresql db name `task_management` with user is `user` and password is `password`
+
+   - **Database**: psql postgresql://user:password@localhost:5432/task_management
 
 ### Option 2: Local Development
 

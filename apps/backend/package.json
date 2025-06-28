@@ -12,15 +12,18 @@
     "lint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write src/**/*.ts",
     "db:generate": "prisma generate",
-    "prisma:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:seed": "ts-node prisma/seed.ts",
-    "db:seed:prod": "node -r ts-node/register prisma/seed.ts",
+    "db:seed:prod": "tsc --outDir dist && node dist/prisma/seed.js",
     "db:migrate": "prisma migrate dev",
     "db:migrate:prod": "prisma migrate deploy",
     "db:deploy": "prisma migrate deploy",
+    "db:setup": "prisma migrate deploy",
     "db:reset": "prisma migrate reset"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [
     "task-management",
@@ -62,8 +65,5 @@
     "eslint": "^9.29.0",
     "nodemon": "^3.1.10",
     "prettier": "^3.6.1"
-  },
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
   }
 }

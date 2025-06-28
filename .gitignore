@@ -1,7 +1,6 @@
 
 node_modules/
 dist/
-generated/prisma/
 .env
 *.log
 logs/
@@ -44,7 +43,6 @@ apps/backend/node_modules/
 apps/backend/dist/
 apps/backend/coverage/
 apps/backend/prisma/migrations/
-apps/backend/generated/prisma
 apps/backend/prisma/dev.db
 apps/backend/.env
 apps/backend/.eslintcache

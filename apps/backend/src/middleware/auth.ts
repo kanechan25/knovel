@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
 import prisma from '../config/database';
 import type { UserRole } from '@prisma/client';
-import { AppError } from './errorHandler';
 import logger from '../config/logger';
 
 interface JwtPayload {
@@ -22,11 +21,7 @@ declare global {
   }
 }
 
-export const authenticateToken = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+export const authenticateToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -37,10 +32,10 @@ export const authenticateToken = async (
 
   try {
     const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload;
-    
+
     // Verify user still exists
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId }
+      where: { id: decoded.userId },
     });
 
     if (!user) {
@@ -50,12 +45,12 @@ export const authenticateToken = async (
 
     req.user = {
       userId: decoded.userId,
-      role: decoded.role
+      role: decoded.role,
     };
-    
+
     logger.debug(`User authenticated: ${user.username} (${user.role})`);
     next();
-  } catch (error) {
+  } catch {
     res.status(403).json({ message: 'Invalid token' });
   }
 };

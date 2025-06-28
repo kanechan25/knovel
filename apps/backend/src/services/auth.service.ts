@@ -7,7 +7,7 @@ import logger from '../config/logger';
 import type { AuthUser, AuthResponse, SignupData, SigninData } from '../types';
 
 class AuthService {
-  private createToken(payload: AuthUser): string {
+  private createToken(payload: { userId: string; role: string }): string {
     return jwt.sign(payload, env.JWT_SECRET, { expiresIn: '48h' });
   }
 
@@ -39,7 +39,10 @@ class AuthService {
       username: user.username,
       role: user.role,
     };
-    const token = this.createToken(authUser);
+    const token = this.createToken({
+      userId: user.id,
+      role: user.role,
+    });
     return {
       token,
       user: authUser,
@@ -73,7 +76,10 @@ class AuthService {
       username: user.username,
       role: user.role,
     };
-    const token = this.createToken(authUser);
+    const token = this.createToken({
+      userId: user.id,
+      role: user.role,
+    });
     return {
       token,
       user: authUser,

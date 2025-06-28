@@ -60,7 +60,7 @@ const TaskList: React.FC = () => {
   };
 
   const canDelete = (task: Task) => {
-    return user?.role === 'EMPLOYER' && task.createdBy.id === user.id;
+    return user?.role === 'EMPLOYER' && task?.createdBy?.id === user.id;
   };
 
   if (loading) {
@@ -204,7 +204,7 @@ const TaskList: React.FC = () => {
                   <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 text-sm text-secondary-500'>
                     <div>
                       <span className='font-medium'>Created by:</span>{' '}
-                      {task.createdBy.username}
+                      {task?.createdBy?.username}
                     </div>
                     <div>
                       <span className='font-medium'>Assigned to:</span>{' '}

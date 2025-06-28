@@ -1,409 +1,174 @@
-# Task Management Fullstack Application
+# 🚀 Task Management System
 
-A comprehensive **Task Management System** with role-based access control, built with modern technologies and designed for two user types: `Employer` and `Employee`.
+A modern, full-stack **Task Management Application** with role-based access control, built with cutting-edge technologies and designed for seamless collaboration between employers and employees.
 
-## 🚀 Features
+## ✨ Features
 
-### 👔 Employer Features
+### 👔 For Employers
 
-- **Create and Assign Tasks**: Create tasks and assign them to specific employees
-- **View All Tasks**: Access to all tasks with advanced filtering and sorting
-- **Filter by Assignee**: View tasks assigned to specific employees
-- **Filter by Status**: Filter tasks by status (Pending, In Progress, Completed)
-- **Sort Options**: Sort by creation date, due date, or status
-- **Employee Summary**: Dashboard showing employee task statistics and completion rates
+- **Create & Assign Tasks**: Create detailed tasks with descriptions, due dates, and assign them to specific employees
+- **Task Management**: Full CRUD operations on your created tasks
+- **Employee Overview**: View comprehensive employee performance dashboards
+- **Advanced Filtering**: Filter tasks by assignee, status, and sort by multiple criteria
+- **Team Analytics**: Real-time completion rates and task statistics
+- **Employee Summary**: Detailed insights into each employee's task performance with visual progress indicators
 
-### 👨‍💻 Employee Features
+### 👨‍💻 For Employees
 
-- **View Assigned Tasks**: Access only to personally assigned tasks
-- **Update Task Status**: Change task status (Pending → In Progress → Completed)
-- **Task Details**: View task descriptions, due dates, and other details
+- **Personal Dashboard**: View all personally assigned tasks in a clean interface
+- **Task Status Updates**: Update task status (Pending → In Progress → Completed)
+- **Task Details**: Access complete task information including descriptions and due dates
+- **Progress Tracking**: Monitor personal task completion rates and performance
+
+### 🔐 Security & Authentication
+
+- **JWT-Based Authentication**: Secure token-based authentication system
+- **Role-Based Access Control**: Strict permissions based on user roles
+- **Password Security**: Bcrypt hashing for secure password storage
+- **Rate Limiting**: API protection against abuse
+- **CORS Protection**: Secure cross-origin resource sharing
 
 ## 🛠 Technology Stack
 
-### Backend
+### Backend (Node.js/Express)
 
-- **Language**: TypeScript
-- **Framework**: Node.js with Express.js
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: JWT-based with role-based access control
-- **Validation**: Express-validator
-- **Security**: Helmet, CORS, Rate limiting
+- **Runtime**: Node.js 18+ with Express.js 5.x
+- **Language**: TypeScript with strict mode
+- **Database**: PostgreSQL 16 with Prisma ORM 6.x
+- **Authentication**: JWT + bcryptjs for password hashing
+- **Validation**: Zod schemas with express-validator
+- **Security**: Helmet, CORS, express-rate-limit
+- **Logging**: Winston with custom transport configurations
+- **Middleware**: Custom auth, error handling, and validation middleware
 
-### Frontend
+### Frontend (React/Vite)
 
-- **Language**: TypeScript
-- **Framework**: React 18 with Vite
-- **Styling**: TailwindCSS + Material UI (MUI)
-- **State Management**: Zustand
-- **HTTP Client**: Axios
-- **Notifications**: React-toastify
-- **Date Handling**: Day.js
+- **Framework**: React 18 with functional components and hooks
+- **Build Tool**: Vite 6.x with fast HMR
+- **Language**: TypeScript with strict mode
+- **Styling**: TailwindCSS 3.x with custom design system
+- **State Management**: Zustand with persistence middleware
+- **HTTP Client**: Axios with interceptors
+- **Notifications**: React Toastify
+- **Date Handling**: Day.js for efficient date operations
+- **UI Components**: Custom reusable components with accessibility
 
-### DevOps & Tools
+### DevOps & Infrastructure
 
-- **Containerization**: Docker & Docker Compose
-- **Code Quality**: ESLint + Prettier (both frontend & backend)
-- **Database Migrations**: Prisma
-- **Environment**: Development and Production configurations
-
-## 📁 Project Structure
-
-```
-knovel/
-├── apps/
-│   ├── backend/                 # Node.js/Express API
-│   │   ├── src/
-│   │   │   ├── controllers/     # Route controllers
-│   │   │   ├── middleware/      # Auth & validation middleware
-│   │   │   ├── routes/         # API routes
-│   │   │   ├── services/       # Business logic
-│   │   │   ├── types/          # TypeScript definitions
-│   │   │   └── index.ts        # Server entry point
-│   │   ├── prisma/
-│   │   │   ├── schema.prisma   # Database schema
-│   │   │   └── seed.ts         # Database seed data
-│   │   ├── Dockerfile
-│   │   └── package.json
-│   │
-│   └── frontend/               # React/Vite app
-│       ├── src/
-│       │   ├── components/     # React components
-│       │   ├── stores/         # Zustand stores
-│       │   ├── services/       # API services
-│       │   ├── types/          # TypeScript definitions
-│       │   └── App.tsx         # Main app component
-│       ├── Dockerfile
-│       ├── nginx.conf
-│       └── package.json
-│
-├── docker-compose.yml          # Full-stack orchestration
-└── README.md
-```
+- **Orchestration**: Docker Compose with health checks
+- **Web Server**: Nginx with optimized configuration
+- **Security**: Non-root containers, security headers
+- **Monitoring**: Built-in health checks and logging
+- **Deployment**: Production-ready Docker setup with automated scripts
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Node.js** 18+ and npm
-- **Docker** and Docker Compose
-- **PostgreSQL** (for local development)
+- **Docker** 20.0+ and **Docker Compose** 2.0+
+- **Node.js** 18+ (for local development)
+- **PostgreSQL** 16+ (for local development)
 
-### Option 1: Docker Compose (Recommended)
+### Option 1: Docker Deployment
 
-1. **Clone and navigate to the project**:
+1. **Clone the repository**:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/kanechan25/knovel
    cd knovel
    ```
 
-2. **Start the full application**:
+2. **Deploy with one command**:
 
    ```bash
-   docker-compose up --build
+   # Using the automated script
+   ./deploy.sh
+
+   # Or manually
+   docker-compose up --build -d
    ```
 
 3. **Access the application**:
    - **Frontend**: http://localhost:3000
    - **Backend API**: http://localhost:5000
-   - **Database**: localhost:5432
+   - **Database**: psql postgresql://user:password@localhost:5432/yourdb
 
 ### Option 2: Local Development
 
 #### Backend Setup
 
-1. **Navigate to backend directory**:
+```bash
+cd apps/backend
+npm install
+cp .env.example .env
 
-   ```bash
-   cd apps/backend
-   ```
+# Database setup
+npm run db:generate
+npm run db:migrate
+npm run db:seed
 
-2. **Install dependencies**:
-
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**:
-
-   ```bash
-   cp env.template .env
-   # Edit .env with your database credentials
-   ```
-
-4. **Set up database**:
-
-   ```bash
-   # Start PostgreSQL (ensure it's running)
-   # Create database: task_management
-
-   # Generate Prisma client
-   npm run db:generate
-
-   # Run database migrations
-   npm run db:migrate
-
-   # Seed the database with sample data
-   npm run db:seed
-   ```
-
-5. **Start the backend server**:
-   ```bash
-   npm run dev
-   ```
+# Server runs on http://localhost:5000
+npm run dev
+```
 
 #### Frontend Setup
 
-1. **Navigate to frontend directory**:
-
-   ```bash
-   cd apps/frontend
-   ```
-
-2. **Install dependencies**:
-
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server**:
-
-   ```bash
-   npm run dev
-   ```
-
-4. **Access the application**:
-   - **Frontend**: http://localhost:5173
-   - **Backend API**: http://localhost:5000
-
-## 🔐 Authentication
-
-### Demo Credentials
-
-The application comes with pre-seeded demo accounts:
-
-**Employers:**
-
-- Username: `employer1` | Password: `password123`
-- Username: `employer2` | Password: `password123`
-
-**Employees:**
-
-- Username: `employee1` | Password: `password123`
-- Username: `employee2` | Password: `password123`
-- Username: `employee3` | Password: `password123`
-
-### API Endpoints
-
-#### Authentication
-
-- `POST /auth/signup` - Register new user
-- `POST /auth/signin` - Authenticate user
-- `POST /auth/signout` - Sign out (client-side)
-
-#### Tasks
-
-- `GET /tasks` - Get tasks (filtered by role)
-- `POST /tasks` - Create task (Employer only)
-- `GET /tasks/:id` - Get specific task
-- `PUT /tasks/:id` - Update task
-- `DELETE /tasks/:id` - Delete task (Employer only)
-- `GET /tasks/employees` - Get employees list (Employer only)
-- `GET /tasks/summary` - Get employee summary (Employer only)
-
-## 📊 Database Schema
-
-### Users Table
-
-- `id` - Unique identifier
-- `username` - Unique username
-- `password` - Hashed password
-- `role` - EMPLOYER | EMPLOYEE
-- `createdAt` - Creation timestamp
-- `updatedAt` - Update timestamp
-
-### Tasks Table
-
-- `id` - Unique identifier
-- `title` - Task title
-- `description` - Task description (optional)
-- `status` - PENDING | IN_PROGRESS | COMPLETED
-- `dueDate` - Due date (optional)
-- `createdById` - Reference to creator (User)
-- `assignedToId` - Reference to assignee (User, optional)
-- `createdAt` - Creation timestamp
-- `updatedAt` - Update timestamp
-
-## 🧪 Development
-
-### Code Quality
-
-**Backend:**
-
-```bash
-cd apps/backend
-npm run lint        # Check linting
-npm run lint:fix    # Fix linting issues
-npm run format      # Format code with Prettier
-```
-
-**Frontend:**
-
 ```bash
 cd apps/frontend
-npm run lint        # Check linting
-npm run lint:fix    # Fix linting issues
-npm run format      # Format code with Prettier
+npm install
+cp .env.example .env
+
+# App runs on http://localhost:5173
+npm run dev
 ```
 
-### Database Operations
+## 🔐 Demo Credentials
 
-```bash
-cd apps/backend
+The application comes pre-seeded with demo accounts:
 
-# Generate Prisma client
-npm run db:generate
+| Role         | Username    | Password     | Description                        |
+| ------------ | ----------- | ------------ | ---------------------------------- |
+| **Employer** | `employer1` | `knovel123@` | Can create and manage tasks        |
+| **Employer** | `employer2` | `knovel123@` | Can create and manage tasks        |
+| **Employee** | `employee1` | `knovel123@` | Can view and update assigned tasks |
+| **Employee** | `employee2` | `knovel123@` | Can view and update assigned tasks |
+| **Employee** | `employee3` | `knovel123@` | Can view and update assigned tasks |
 
-# Create and apply migration
-npm run db:migrate
+## 🔌 API Endpoints
 
-# View database in Prisma Studio
-npm run db:studio
+### Authentication
 
-# Reset database (caution!)
-npm run db:reset
+- `POST /auth/signup` - Register new user with role selection
+- `POST /auth/signin` - Authenticate user and return JWT token
 
-# Seed database with sample data
-npm run db:seed
-```
+### Tasks
 
-## 🐳 Docker Commands
+- `GET /tasks` - Get tasks (filtered by user role and permissions)
+- `POST /tasks` - Create new task (Employer only)
+- `GET /tasks/:id` - Get specific task details
+- `PUT /tasks/:id` - Update task (role-based permissions)
+- `DELETE /tasks/:id` - Delete task (Creator only)
+- `GET /tasks/employees` - Get employees list (Employer only)
 
-```bash
-# Build and start all services
-docker-compose up --build
+### System
 
-# Start services in background
-docker-compose up -d
+- `GET /health` - Health check endpoint with system info
 
-# Stop all services
-docker-compose down
+### Environment Variables
 
-# View logs
-docker-compose logs -f
-
-# Rebuild specific service
-docker-compose build backend
-docker-compose build frontend
-
-# Remove all containers and volumes
-docker-compose down -v
-```
-
-## 🔧 Environment Variables
-
-### Backend (.env)
+#### Backend (.env)
 
 ```env
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/task_management?schema=public"
 PORT=5000
 NODE_ENV=development
-JWT_SECRET=your_super_secret_jwt_key_here
-JWT_EXPIRES_IN=24h
-DATABASE_URL=postgresql://user:password@localhost:5432/task_management?schema=public
+JWT_SECRET="your_super_secret_jwt_key_here"
+FRONTEND_URL="http://localhost:5173"
 ```
 
-### Frontend (.env.local)
+#### Frontend (.env)
 
 ```env
-VITE_API_URL=http://localhost:5000
+VITE_API_URL="http://localhost:5000"
 ```
-
-## 🚦 Testing the Application
-
-1. **Start the application** using Docker Compose or local development
-2. **Access the frontend** at http://localhost:3000 (Docker) or http://localhost:5173 (local)
-3. **Sign in** with demo credentials
-4. **Test Employer features**:
-   - Create new tasks
-   - Assign tasks to employees
-   - View employee summary
-   - Filter and sort tasks
-5. **Test Employee features**:
-   - View assigned tasks
-   - Update task status
-   - Check task details
-
-## 📈 Features Implemented
-
-✅ **Authentication & Authorization**
-
-- JWT-based authentication
-- Role-based access control
-- Secure password hashing
-
-✅ **Task Management**
-
-- CRUD operations for tasks
-- Task assignment system
-- Status tracking
-
-✅ **Filtering & Sorting**
-
-- Filter by assignee
-- Filter by status
-- Sort by date and status
-
-✅ **Employee Management**
-
-- Employee task summary
-- Completion rate tracking
-- Performance metrics
-
-✅ **Security & Best Practices**
-
-- Input validation
-- Rate limiting
-- CORS protection
-- Error handling
-
-✅ **Code Quality**
-
-- TypeScript throughout
-- ESLint + Prettier
-- Consistent code style
-
-✅ **Deployment Ready**
-
-- Docker containerization
-- Production configurations
-- Environment management
-
-## 🛣 Roadmap
-
-Potential future enhancements:
-
-- [ ] Real-time notifications
-- [ ] File attachments for tasks
-- [ ] Task comments and collaboration
-- [ ] Advanced reporting and analytics
-- [ ] Email notifications
-- [ ] Task templates
-- [ ] Time tracking
-- [ ] Calendar integration
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-**Built with ❤️ using modern web technologies**

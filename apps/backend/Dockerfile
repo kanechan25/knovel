@@ -1,34 +1,52 @@
-# Use Node.js 18 LTS
+
 FROM node:18-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files
+RUN apk add --no-cache postgresql-client curl
+
 COPY package*.json ./
+
+RUN npm ci --only=production && npm cache clean --force
+
 COPY prisma ./prisma/
 
-# Install dependencies
-RUN npm install
-
-# Copy source code
-COPY . .
-
-# Generate Prisma client
 RUN npx prisma generate
 
-# Build the application
+COPY . .
+
 RUN npm run build
 
-# Expose port
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S backend -u 1001
+
+RUN cat > /app/start.sh << 'EOF'
+#!/bin/sh
+set -e
+
+echo "Starting backend application..."
+echo "Waiting for database to be ready..."
+until pg_isready -h postgres -p 5432 -U user; do
+  echo "Database is unavailable - sleeping"
+  sleep 2
+done
+
+echo "Database is ready!"
+echo "Running database migrations..."
+npx prisma migrate deploy
+echo "🌱 Seeding database..."
+npx prisma db seed
+
+echo "Starting the server..."
+npm start
+EOF
+
+
+RUN chown -R backend:nodejs /app && chmod +x /app/start.sh
+USER backend
+
 EXPOSE 5000
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost:5000/health || exit 1
 
-# Create startup script
-RUN echo '#!/bin/sh' > start.sh && \
-    echo 'npx prisma migrate deploy' >> start.sh && \
-    echo 'npx prisma db seed' >> start.sh && \
-    echo 'npm start' >> start.sh && \
-    chmod +x start.sh
-
-# Start the application
-CMD ["./start.sh"] 
+CMD ["/app/start.sh"] 

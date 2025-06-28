@@ -11,3 +11,12 @@ const envSchema = z.object({
   FRONTEND_URL: z.string().default('http://localhost:5173'),
 });
 export const env = envSchema.parse(process.env);
+
+export const allowedOrigins = [
+  env.FRONTEND_URL,
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000',
+];

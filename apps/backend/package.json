@@ -4,9 +4,10 @@
   "description": "Task Management System Backend",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npx prisma generate && tsc",
     "dev": "nodemon src/index.ts",
-    "start": "node dist/index.js",
+    "start": "npm run db:deploy && npm run db:seed:prod && node dist/index.js",
+    "postinstall": "npx prisma generate",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write src/**/*.ts",
@@ -14,7 +15,10 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:seed": "ts-node prisma/seed.ts",
+    "db:seed:prod": "node -r ts-node/register prisma/seed.ts",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:prod": "prisma migrate deploy",
+    "db:deploy": "prisma migrate deploy",
     "db:reset": "prisma migrate reset"
   },
   "keywords": [
@@ -28,6 +32,7 @@
   "type": "commonjs",
   "dependencies": {
     "@prisma/client": "^6.10.1",
+    "@types/node": "^24.0.4",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
@@ -38,6 +43,8 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "prisma": "^6.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
     "winston": "^3.17.0",
     "zod": "^3.25.67"
   },
@@ -49,14 +56,11 @@
     "@types/express-rate-limit": "^5.1.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
-    "@types/node": "^24.0.4",
     "@typescript-eslint/eslint-plugin": "^8.35.0",
     "@typescript-eslint/parser": "^8.35.0",
     "eslint": "^9.29.0",
     "nodemon": "^3.1.10",
-    "prettier": "^3.6.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "prettier": "^3.6.1"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

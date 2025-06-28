@@ -1,6 +1,12 @@
-# 🚀 Task Management System
+# 🚀 Task Management Application
 
-A modern, full-stack **Task Management Application** with role-based access control, built with cutting-edge technologies and designed for seamless collaboration between employers and employees.
+### 🌐 Live Demo
+
+Experience the application live at: [Task Management Application](https://knovel-fe.vercel.app/)
+
+### 🔗 API Health Check
+
+Backend API is running at: [Backend Health Check](https://knovel-be.onrender.com/health)
 
 ## ✨ Features
 
@@ -102,12 +108,10 @@ cd apps/backend
 npm install
 cp .env.example .env
 
-# Database setup
 npm run db:generate
 npm run db:migrate
 npm run db:seed
 
-# Server runs on http://localhost:5000
 npm run dev
 ```
 
@@ -118,7 +122,6 @@ cd apps/frontend
 npm install
 cp .env.example .env
 
-# App runs on http://localhost:5173
 npm run dev
 ```
 

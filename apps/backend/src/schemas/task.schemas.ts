@@ -1,10 +1,8 @@
 import { z } from 'zod';
 
-// Custom CUID validation (format: c + 24 alphanumeric characters)
 const cuidRegex = /^c[a-z0-9]{24}$/;
 const cuid = () => z.string().regex(cuidRegex, 'Invalid ID format');
 
-// Custom date validation that accepts YYYY-MM-DD and converts to ISO datetime
 const dateString = () =>
   z.string().refine((date) => {
     // Accept YYYY-MM-DD format and validate it's a valid date

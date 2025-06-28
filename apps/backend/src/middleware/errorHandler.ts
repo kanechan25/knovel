@@ -35,8 +35,6 @@ export const globalErrorHandler = (err: Error, req: Request, res: Response, _nex
     ip: req.ip,
     userAgent: req.get('User-Agent'),
   });
-
-  //  different errors
   if (err instanceof ZodError) {
     const errors = err.errors.map((error) => ({
       field: error.path.join('.'),

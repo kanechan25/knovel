@@ -11,11 +11,9 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
       res.status(400).json({ errors: errors.array() });
       return;
     }
-
     const taskData = req.body;
     const user = { id: req.user!.userId, username: req.user!.userId, role: req.user!.role };
 
-    // Convert to service data format (dueDate should be string)
     const serviceData = {
       ...taskData,
       dueDate: taskData.dueDate ? taskData.dueDate : undefined
@@ -69,12 +67,10 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
       res.status(400).json({ errors: errors.array() });
       return;
     }
-
     const { id } = req.params;
     const updateData: UpdateTaskDto = req.body;
     const user = { id: req.user!.userId, username: req.user!.userId, role: req.user!.role };
 
-    // Convert Date to string for service
     const serviceData = {
       ...updateData,
       dueDate: updateData.dueDate ? updateData.dueDate.toISOString() : undefined

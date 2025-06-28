@@ -10,7 +10,6 @@ const EyeIcon: React.FC<EyeIconProps> = ({
   isVisible = true,
 }) => {
   if (isVisible) {
-    // Eye open (password visible)
     return (
       <svg
         className={className}
@@ -35,7 +34,6 @@ const EyeIcon: React.FC<EyeIconProps> = ({
     );
   }
 
-  // Eye closed/slashed (password hidden)
   return (
     <svg
       className={className}

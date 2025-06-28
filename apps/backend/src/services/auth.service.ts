@@ -21,7 +21,7 @@ class AuthService {
       throw new AppError('Username already exists', 409);
     }
 
-    // Case2: create new user
+    // Case 2: create new user
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(data.password, saltRounds);
     const user = await prisma.user.create({
@@ -33,7 +33,7 @@ class AuthService {
     });
 
     logger.info(`User created successfully: ${user.username} (${user.role})`);
-    // Generate JWT
+    // generate JWT
     const authUser: AuthUser = {
       id: user.id,
       username: user.username,
@@ -70,7 +70,7 @@ class AuthService {
 
     logger.info(`User signed in successfully: ${user.username}`);
 
-    // Generate JWT
+    // generate JWT
     const authUser: AuthUser = {
       id: user.id,
       username: user.username,

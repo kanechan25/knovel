@@ -3,11 +3,10 @@ import { useAuthStore } from '../../stores/auth.store';
 import { authAPI } from '../../services/api';
 
 const Navbar: React.FC = () => {
-  const { user, clearAuth } = useAuthStore();
+  const { user } = useAuthStore();
 
-  const handleLogout = () => {
-    authAPI.signout();
-    clearAuth();
+  const handleLogout = async () => {
+    await authAPI.signout();
   };
 
   return (

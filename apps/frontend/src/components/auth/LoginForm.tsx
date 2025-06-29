@@ -19,7 +19,7 @@ const LoginForm: React.FC<FormProps> = ({ onToggleForm }) => {
 
     try {
       const response = await authAPI.signin(formData);
-      setAuth(response.user, response.token);
+      setAuth(response.user);
       toast.success(`Welcome back, ${response.user.username}!`);
     } catch (error) {
       console.error('Login error:', error);

@@ -4,9 +4,8 @@ import type { User } from '../types';
 
 interface AuthState {
   user: User | null;
-  token: string | null;
   isAuthenticated: boolean;
-  setAuth: (user: User, token: string) => void;
+  setAuth: (user: User) => void;
   clearAuth: () => void;
   isEmployer: () => boolean;
   isEmployee: () => boolean;
@@ -16,20 +15,17 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
       user: null,
-      token: null,
       isAuthenticated: false,
 
-      setAuth: (user: User, token: string) =>
+      setAuth: (user: User) =>
         set({
           user,
-          token,
           isAuthenticated: true,
         }),
 
       clearAuth: () =>
         set({
           user: null,
-          token: null,
           isAuthenticated: false,
         }),
 
@@ -48,7 +44,6 @@ export const useAuthStore = create<AuthState>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
-        token: state.token,
         isAuthenticated: state.isAuthenticated,
       }),
     }

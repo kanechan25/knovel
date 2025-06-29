@@ -19,19 +19,8 @@ const api: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
-
-// interceptor to add auth token
-api.interceptors.request.use(
-  (config) => {
-    const token = useAuthStore.getState().token;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
 
 // interceptor for error handling
 api.interceptors.response.use(
@@ -65,9 +54,15 @@ export const authAPI = {
     return response.data;
   },
 
-  signout: () => {
-    useAuthStore.getState().clearAuth();
-    toast.success('Signed out successfully');
+  signout: async () => {
+    try {
+      await api.post('/auth/signout');
+      toast.success('Signed out successfully');
+    } catch (error) {
+      console.error('Signout error:', error);
+    } finally {
+      useAuthStore.getState().clearAuth();
+    }
   },
 };
 

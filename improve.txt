@@ -1,0 +1,5 @@
+If can be improved/enhanced features or functions in this applications:
+1. Backend: put blacklist token when user signout to avoid malicious login session.
+2. Frontend: 
+  1. DO NOT save token JWT in the localstorage => save in the cookie and auto sent attach when call API
+  2. dark theme / light theme

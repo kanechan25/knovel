@@ -10,7 +10,6 @@ export interface FormProps {
 }
 
 export interface AuthResponse {
-  token: string;
   user: User;
 }
 

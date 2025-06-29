@@ -6,6 +6,7 @@ import { env, allowedOrigins } from './config/env';
 import logger, { morganStream } from './config/logger';
 import { setupRoutes } from './routes';
 import { mkdirSync } from 'fs';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 app.use(helmet());
@@ -28,6 +29,7 @@ app.use(
 );
 
 // middleware
+app.use(cookieParser());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 if (env.NODE_ENV !== 'production') {

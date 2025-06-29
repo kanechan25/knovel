@@ -35,7 +35,7 @@ const SignupForm: React.FC<FormProps> = ({ onToggleForm }) => {
     setLoading(true);
     try {
       const response = await authAPI.signup(formData);
-      setAuth(response.user, response.token);
+      setAuth(response.user);
       toast.success(`Welcome to Task Management, ${response.user.username}!`);
     } catch (error) {
       console.error('Signup error:', error);
